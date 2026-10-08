@@ -52,6 +52,7 @@ store = ProductStore()
 app.add_middleware(
     CORSMiddleware,
     allow_origins=[
+        "https://scamshield.shashankhu.dev",
         "http://localhost:3000",
         "http://127.0.0.1:3000",
         "https://scamshield-theta-seven.vercel.app",
