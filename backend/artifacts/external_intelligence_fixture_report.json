@@ -1,0 +1,82 @@
+{
+  "scope": "deterministic offline external-intelligence fixtures",
+  "production_changes": {
+    "risk_fusion_modified": false,
+    "dataset_modified": false,
+    "ml_artifact_modified": false,
+    "shap_modified": false,
+    "live_network_calls": false
+  },
+  "fixture_inventory": {
+    "reputation": [
+      "google confirmed malicious",
+      "google confirmed clean",
+      "phishtank confirmed malicious",
+      "phishtank confirmed clean",
+      "openphish confirmed malicious",
+      "openphish confirmed clean",
+      "provider disagreement",
+      "provider unavailable",
+      "timeout",
+      "malformed response",
+      "provider HTTP error",
+      "rate limited"
+    ],
+    "domain_intelligence": [
+      "DNS A",
+      "DNS AAAA",
+      "DNS MX",
+      "DNS NS",
+      "DNS CNAME",
+      "private and special IP detection",
+      "RDAP registration and domain age",
+      "expired TLS certificate",
+      "hostname mismatch",
+      "unavailable and timeout",
+      "malformed RDAP"
+    ],
+    "redirect": [
+      "no redirect",
+      "one redirect",
+      "multiple redirects",
+      "cross-domain redirect",
+      "shortener",
+      "redirect loop",
+      "hop limit",
+      "private destination",
+      "localhost destination",
+      "cloud metadata destination",
+      "DNS rebinding",
+      "timeout",
+      "malformed Location"
+    ]
+  },
+  "normalized_results": {
+    "reputation_confirmed_cases": "pass",
+    "reputation_disagreement": "pass",
+    "reputation_unavailable_and_failures": "pass",
+    "domain_dns_rdap_tls": "pass",
+    "redirect_ssrf_and_bounds": "pass",
+    "fusion_signal_participation": "pass",
+    "evidence_aware_semantics": "pass",
+    "shap_explanatory_only": "pass",
+    "serialization": "pass"
+  },
+  "tests": {
+    "fixture_focused": {
+      "collected": 58,
+      "passed": 58,
+      "failed": 0,
+      "skipped": 0,
+      "duration": "1.26s"
+    },
+    "complete_backend": {
+      "collected": 189,
+      "passed": 188,
+      "failed": 1,
+      "skipped": 0,
+      "duration": "3.26s",
+      "failure": "tests/test_shap_explainability.py::test_positive_and_negative_attributions_are_real_shap_values"
+    }
+  }
+}

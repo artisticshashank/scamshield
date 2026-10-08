@@ -1,0 +1,1632 @@
+{
+  "artifact": "C:\\Users\\SHASHANK\\OneDrive\\Desktop\\3RD-YR-MP\\backend\\artifacts\\scamshield_domain_grouped_baseline.pkl",
+  "component_contribution": {
+    "domain_intelligence": {
+      "measurable": false,
+      "reason": "no TEST URL matched offline domain fixture; signal unavailable"
+    },
+    "ml": {
+      "comparison": "WITHOUT_ML vs RULE_PLUS_ML",
+      "measurable": true,
+      "reason": "ML is the primary available predictive component"
+    },
+    "redirect": {
+      "measurable": false,
+      "reason": "no TEST URL matched offline redirect fixture; signal unavailable"
+    },
+    "reputation": {
+      "measurable": false,
+      "reason": "no TEST URL matched offline reputation fixture; signal unavailable"
+    },
+    "rules": {
+      "baseline": "ML_ONLY",
+      "comparison": "RULE_PLUS_ML",
+      "f1_delta": 0.023915543703944997,
+      "fn_delta": 24,
+      "fpr_delta": -0.002493111140270306,
+      "measurable": true,
+      "median_latency_delta_ms": 0.0011000047379639,
+      "recall_delta": -0.05263157894736836
+    }
+  },
+  "configuration_definitions": {
+    "DOMAIN_INTELLIGENCE_ONLY": [
+      "domain"
+    ],
+    "FULL_SCAMSHIELD": [
+      "domain",
+      "ml",
+      "redirect",
+      "reputation",
+      "rules"
+    ],
+    "ML_ONLY": [
+      "ml"
+    ],
+    "ML_PLUS_DOMAIN": [
+      "domain",
+      "ml"
+    ],
+    "ML_PLUS_REDIRECT": [
+      "ml",
+      "redirect"
+    ],
+    "ML_PLUS_REPUTATION": [
+      "ml",
+      "reputation"
+    ],
+    "REDIRECT_ONLY": [
+      "redirect"
+    ],
+    "REPUTATION_ONLY": [
+      "reputation"
+    ],
+    "RULE_ONLY": [
+      "rules"
+    ],
+    "RULE_PLUS_ML": [
+      "ml",
+      "rules"
+    ],
+    "RULE_PLUS_ML_PLUS_DOMAIN": [
+      "domain",
+      "ml",
+      "rules"
+    ],
+    "RULE_PLUS_ML_PLUS_DOMAIN_PLUS_REDIRECT": [
+      "domain",
+      "ml",
+      "redirect",
+      "rules"
+    ],
+    "RULE_PLUS_ML_PLUS_REDIRECT": [
+      "ml",
+      "redirect",
+      "rules"
+    ],
+    "RULE_PLUS_ML_PLUS_REPUTATION": [
+      "ml",
+      "reputation",
+      "rules"
+    ],
+    "RULE_PLUS_ML_PLUS_REPUTATION_PLUS_DOMAIN": [
+      "domain",
+      "ml",
+      "reputation",
+      "rules"
+    ],
+    "RULE_PLUS_ML_PLUS_REPUTATION_PLUS_REDIRECT": [
+      "ml",
+      "redirect",
+      "reputation",
+      "rules"
+    ],
+    "RULE_PLUS_REPUTATION": [
+      "reputation",
+      "rules"
+    ],
+    "WITHOUT_DOMAIN_INTELLIGENCE": [
+      "ml",
+      "redirect",
+      "reputation",
+      "rules"
+    ],
+    "WITHOUT_ML": [
+      "domain",
+      "redirect",
+      "reputation",
+      "rules"
+    ],
+    "WITHOUT_REDIRECT_ANALYSIS": [
+      "domain",
+      "ml",
+      "reputation",
+      "rules"
+    ],
+    "WITHOUT_REPUTATION": [
+      "domain",
+      "ml",
+      "redirect",
+      "rules"
+    ],
+    "WITHOUT_RULES": [
+      "domain",
+      "ml",
+      "redirect",
+      "reputation"
+    ]
+  },
+  "dataset": "C:\\Users\\SHASHANK\\OneDrive\\Desktop\\3RD-YR-MP\\backend\\data\\Dataset.csv",
+  "dataset_fingerprint": "d68b3cd0648dcf9c775347416ad1a8995e8a025921fbe3871ca6158d4db3c3a1",
+  "experiment": "final_controlled_component_ablation",
+  "fixture_coverage": {
+    "domain_intelligence": {
+      "fixture_urls": 1,
+      "status": "unavailable_on_test",
+      "test_overlap": 0
+    },
+    "redirect": {
+      "fixture_urls": 1,
+      "status": "unavailable_on_test",
+      "test_overlap": 0
+    },
+    "reputation": {
+      "fixture_urls": 1,
+      "status": "unavailable_on_test",
+      "test_overlap": 0
+    }
+  },
+  "incremental_effect": [
+    {
+      "from": "ML_ONLY",
+      "reason": "external fixture unavailable",
+      "status": "not_measurable",
+      "to": "RULE_PLUS_ML"
+    },
+    {
+      "f1_delta": 0.0,
+      "fn_delta": 0,
+      "fpr_delta": 0.0,
+      "from": "RULE_PLUS_ML",
+      "latency_delta_ms": -0.0001000043994281441,
+      "recall_delta": 0.0,
+      "status": "measured",
+      "to": "RULE_PLUS_ML_PLUS_REPUTATION"
+    },
+    {
+      "f1_delta": 0.0,
+      "fn_delta": 0,
+      "fpr_delta": 0.0,
+      "from": "RULE_PLUS_ML_PLUS_REPUTATION",
+      "latency_delta_ms": 0.0005000001692678779,
+      "recall_delta": 0.0,
+      "status": "measured",
+      "to": "RULE_PLUS_ML_PLUS_REPUTATION_PLUS_DOMAIN"
+    },
+    {
+      "f1_delta": 0.0,
+      "fn_delta": 0,
+      "fpr_delta": 0.0,
+      "from": "RULE_PLUS_ML_PLUS_REPUTATION_PLUS_DOMAIN",
+      "latency_delta_ms": 0.0022000021999701858,
+      "recall_delta": 0.0,
+      "status": "measured",
+      "to": "FULL_SCAMSHIELD"
+    }
+  ],
+  "limitations": [
+    "External fixture corpus has no URL overlap with this real TEST partition, so reputation/domain/redirect contributions are not measurable and remain explicitly unavailable.",
+    "No live network calls were made.",
+    "No external signal was silently treated as clean or malicious.",
+    "SHAP is explanatory-only and excluded from scoring.",
+    "This evaluation does not claim superiority over external products or production readiness.",
+    "ML-only-equivalent configurations use the locked ML threshold 20; configurations with rules use the locked fusion threshold 30."
+  ],
+  "live_network_calls": false,
+  "results": {
+    "DOMAIN_INTELLIGENCE_ONLY": {
+      "available_signals": [],
+      "configuration": "DOMAIN_INTELLIGENCE_ONLY",
+      "latency": {
+        "count": 23319,
+        "median_ms": 0.000100000761449337,
+        "p95_ms": 0.000200001522898674
+      },
+      "metrics": null,
+      "score_distribution": null,
+      "status": "unavailable",
+      "threshold": 30,
+      "unavailable_signals": [
+        "domain",
+        "redirect",
+        "reputation"
+      ]
+    },
+    "FULL_SCAMSHIELD": {
+      "available_signals": [
+        "ml",
+        "rules"
+      ],
+      "configuration": "FULL_SCAMSHIELD",
+      "confusion_counts": {
+        "fn": 89,
+        "fp": 24,
+        "tn": 22839,
+        "tp": 367
+      },
+      "latency": {
+        "count": 23319,
+        "median_ms": 0.006599999323952943,
+        "p95_ms": 0.012900000001536682
+      },
+      "metrics": {
+        "accuracy": 0.9951541661306231,
+        "benign_false_positives": 24,
+        "confusion_matrix": [
+          [
+            22839,
+            24
+          ],
+          [
+            89,
+            367
+          ]
+        ],
+        "f1": 0.8665879574970484,
+        "false_negative_rate": 0.19517543859649122,
+        "false_positive_rate": 0.0010497310064296024,
+        "malicious_false_negatives": 89,
+        "pr_auc_average_precision": 0.9166228558748274,
+        "precision": 0.9386189258312021,
+        "recall": 0.8048245614035088,
+        "roc_auc": 0.9889177795119826,
+        "threshold": 30
+      },
+      "score_distribution": {
+        "max": 99.86547381937595,
+        "mean": 4.512502558147139,
+        "median": 3.659121764249906,
+        "min": 0.0016271784944953977,
+        "q25": 2.4018199842603396,
+        "q75": 3.8571189326975457
+      },
+      "status": "partial_unavailable",
+      "threshold": 30,
+      "unavailable_signals": [
+        "domain",
+        "redirect",
+        "reputation"
+      ]
+    },
+    "ML_ONLY": {
+      "available_signals": [
+        "ml"
+      ],
+      "configuration": "ML_ONLY",
+      "confusion_counts": {
+        "fn": 65,
+        "fp": 81,
+        "tn": 22782,
+        "tp": 391
+      },
+      "latency": {
+        "count": 23319,
+        "median_ms": 0.006000002031214535,
+        "p95_ms": 0.01170000177808106
+      },
+      "metrics": {
+        "accuracy": 0.9937390111068227,
+        "benign_false_positives": 81,
+        "confusion_matrix": [
+          [
+            22782,
+            81
+          ],
+          [
+            65,
+            391
+          ]
+        ],
+        "f1": 0.8426724137931034,
+        "false_negative_rate": 0.1425438596491228,
+        "false_positive_rate": 0.0035428421466999083,
+        "malicious_false_negatives": 65,
+        "pr_auc_average_precision": 0.9193414226335381,
+        "precision": 0.8283898305084746,
+        "recall": 0.8574561403508771,
+        "roc_auc": 0.9931217872130791,
+        "threshold": 20
+      },
+      "score_distribution": null,
+      "status": "available",
+      "threshold": 20,
+      "unavailable_signals": [
+        "domain",
+        "redirect",
+        "reputation"
+      ]
+    },
+    "ML_PLUS_DOMAIN": {
+      "available_signals": [
+        "ml"
+      ],
+      "configuration": "ML_PLUS_DOMAIN",
+      "confusion_counts": {
+        "fn": 65,
+        "fp": 81,
+        "tn": 22782,
+        "tp": 391
+      },
+      "latency": {
+        "count": 23319,
+        "median_ms": 0.005800000508315861,
+        "p95_ms": 0.009599996701581404
+      },
+      "metrics": {
+        "accuracy": 0.9937390111068227,
+        "benign_false_positives": 81,
+        "confusion_matrix": [
+          [
+            22782,
+            81
+          ],
+          [
+            65,
+            391
+          ]
+        ],
+        "f1": 0.8426724137931034,
+        "false_negative_rate": 0.1425438596491228,
+        "false_positive_rate": 0.0035428421466999083,
+        "malicious_false_negatives": 65,
+        "pr_auc_average_precision": 0.9193414226335381,
+        "precision": 0.8283898305084746,
+        "recall": 0.8574561403508771,
+        "roc_auc": 0.9931217872130791,
+        "threshold": 20
+      },
+      "score_distribution": null,
+      "status": "partial_unavailable",
+      "threshold": 20,
+      "unavailable_signals": [
+        "domain",
+        "redirect",
+        "reputation"
+      ]
+    },
+    "ML_PLUS_REDIRECT": {
+      "available_signals": [
+        "ml"
+      ],
+      "configuration": "ML_PLUS_REDIRECT",
+      "confusion_counts": {
+        "fn": 65,
+        "fp": 81,
+        "tn": 22782,
+        "tp": 391
+      },
+      "latency": {
+        "count": 23319,
+        "median_ms": 0.006199999916134402,
+        "p95_ms": 0.01219999830937013
+      },
+      "metrics": {
+        "accuracy": 0.9937390111068227,
+        "benign_false_positives": 81,
+        "confusion_matrix": [
+          [
+            22782,
+            81
+          ],
+          [
+            65,
+            391
+          ]
+        ],
+        "f1": 0.8426724137931034,
+        "false_negative_rate": 0.1425438596491228,
+        "false_positive_rate": 0.0035428421466999083,
+        "malicious_false_negatives": 65,
+        "pr_auc_average_precision": 0.9193414226335381,
+        "precision": 0.8283898305084746,
+        "recall": 0.8574561403508771,
+        "roc_auc": 0.9931217872130791,
+        "threshold": 20
+      },
+      "score_distribution": null,
+      "status": "partial_unavailable",
+      "threshold": 20,
+      "unavailable_signals": [
+        "domain",
+        "redirect",
+        "reputation"
+      ]
+    },
+    "ML_PLUS_REPUTATION": {
+      "available_signals": [
+        "ml"
+      ],
+      "configuration": "ML_PLUS_REPUTATION",
+      "confusion_counts": {
+        "fn": 65,
+        "fp": 81,
+        "tn": 22782,
+        "tp": 391
+      },
+      "latency": {
+        "count": 23319,
+        "median_ms": 0.006900001608300954,
+        "p95_ms": 0.010200001270277426
+      },
+      "metrics": {
+        "accuracy": 0.9937390111068227,
+        "benign_false_positives": 81,
+        "confusion_matrix": [
+          [
+            22782,
+            81
+          ],
+          [
+            65,
+            391
+          ]
+        ],
+        "f1": 0.8426724137931034,
+        "false_negative_rate": 0.1425438596491228,
+        "false_positive_rate": 0.0035428421466999083,
+        "malicious_false_negatives": 65,
+        "pr_auc_average_precision": 0.9193414226335381,
+        "precision": 0.8283898305084746,
+        "recall": 0.8574561403508771,
+        "roc_auc": 0.9931217872130791,
+        "threshold": 20
+      },
+      "score_distribution": null,
+      "status": "partial_unavailable",
+      "threshold": 20,
+      "unavailable_signals": [
+        "domain",
+        "redirect",
+        "reputation"
+      ]
+    },
+    "REDIRECT_ONLY": {
+      "available_signals": [],
+      "configuration": "REDIRECT_ONLY",
+      "latency": {
+        "count": 23319,
+        "median_ms": 0.00019999788491986692,
+        "p95_ms": 0.000200001522898674
+      },
+      "metrics": null,
+      "score_distribution": null,
+      "status": "unavailable",
+      "threshold": 30,
+      "unavailable_signals": [
+        "domain",
+        "redirect",
+        "reputation"
+      ]
+    },
+    "REPUTATION_ONLY": {
+      "available_signals": [],
+      "configuration": "REPUTATION_ONLY",
+      "latency": {
+        "count": 23319,
+        "median_ms": 0.000100000761449337,
+        "p95_ms": 0.00019999788491986692
+      },
+      "metrics": null,
+      "score_distribution": null,
+      "status": "unavailable",
+      "threshold": 30,
+      "unavailable_signals": [
+        "domain",
+        "redirect",
+        "reputation"
+      ]
+    },
+    "RULE_ONLY": {
+      "available_signals": [
+        "rules"
+      ],
+      "configuration": "RULE_ONLY",
+      "confusion_counts": {
+        "fn": 449,
+        "fp": 0,
+        "tn": 22863,
+        "tp": 7
+      },
+      "latency": {
+        "count": 23319,
+        "median_ms": 0.006199999916134402,
+        "p95_ms": 0.011600001016631722
+      },
+      "metrics": {
+        "accuracy": 0.9807453149792015,
+        "benign_false_positives": 0,
+        "confusion_matrix": [
+          [
+            22863,
+            0
+          ],
+          [
+            449,
+            7
+          ]
+        ],
+        "f1": 0.03023758099352052,
+        "false_negative_rate": 0.9846491228070176,
+        "false_positive_rate": 0.0,
+        "malicious_false_negatives": 449,
+        "pr_auc_average_precision": 0.1019385893036712,
+        "precision": 1.0,
+        "recall": 0.015350877192982455,
+        "roc_auc": 0.3476023468547588,
+        "threshold": 30
+      },
+      "score_distribution": {
+        "max": 53.92962190010342,
+        "mean": 4.868261011032834,
+        "median": 7.225651367144714,
+        "min": 0.0,
+        "q25": 0.0,
+        "q75": 7.225651367144714
+      },
+      "status": "available",
+      "threshold": 30,
+      "unavailable_signals": [
+        "domain",
+        "redirect",
+        "reputation"
+      ]
+    },
+    "RULE_PLUS_ML": {
+      "available_signals": [
+        "ml",
+        "rules"
+      ],
+      "configuration": "RULE_PLUS_ML",
+      "confusion_counts": {
+        "fn": 89,
+        "fp": 24,
+        "tn": 22839,
+        "tp": 367
+      },
+      "latency": {
+        "count": 23319,
+        "median_ms": 0.00670000008540228,
+        "p95_ms": 0.014799999917158857
+      },
+      "metrics": {
+        "accuracy": 0.9951541661306231,
+        "benign_false_positives": 24,
+        "confusion_matrix": [
+          [
+            22839,
+            24
+          ],
+          [
+            89,
+            367
+          ]
+        ],
+        "f1": 0.8665879574970484,
+        "false_negative_rate": 0.19517543859649122,
+        "false_positive_rate": 0.0010497310064296024,
+        "malicious_false_negatives": 89,
+        "pr_auc_average_precision": 0.9166228558748274,
+        "precision": 0.9386189258312021,
+        "recall": 0.8048245614035088,
+        "roc_auc": 0.9889177795119826,
+        "threshold": 30
+      },
+      "score_distribution": {
+        "max": 99.86547381937595,
+        "mean": 4.512502558147139,
+        "median": 3.659121764249906,
+        "min": 0.0016271784944953977,
+        "q25": 2.4018199842603396,
+        "q75": 3.8571189326975457
+      },
+      "status": "available",
+      "threshold": 30,
+      "unavailable_signals": [
+        "domain",
+        "redirect",
+        "reputation"
+      ]
+    },
+    "RULE_PLUS_ML_PLUS_DOMAIN": {
+      "available_signals": [
+        "ml",
+        "rules"
+      ],
+      "configuration": "RULE_PLUS_ML_PLUS_DOMAIN",
+      "confusion_counts": {
+        "fn": 89,
+        "fp": 24,
+        "tn": 22839,
+        "tp": 367
+      },
+      "latency": {
+        "count": 23319,
+        "median_ms": 0.006800000846851617,
+        "p95_ms": 0.012900000001536682
+      },
+      "metrics": {
+        "accuracy": 0.9951541661306231,
+        "benign_false_positives": 24,
+        "confusion_matrix": [
+          [
+            22839,
+            24
+          ],
+          [
+            89,
+            367
+          ]
+        ],
+        "f1": 0.8665879574970484,
+        "false_negative_rate": 0.19517543859649122,
+        "false_positive_rate": 0.0010497310064296024,
+        "malicious_false_negatives": 89,
+        "pr_auc_average_precision": 0.9166228558748274,
+        "precision": 0.9386189258312021,
+        "recall": 0.8048245614035088,
+        "roc_auc": 0.9889177795119826,
+        "threshold": 30
+      },
+      "score_distribution": {
+        "max": 99.86547381937595,
+        "mean": 4.512502558147139,
+        "median": 3.659121764249906,
+        "min": 0.0016271784944953977,
+        "q25": 2.4018199842603396,
+        "q75": 3.8571189326975457
+      },
+      "status": "partial_unavailable",
+      "threshold": 30,
+      "unavailable_signals": [
+        "domain",
+        "redirect",
+        "reputation"
+      ]
+    },
+    "RULE_PLUS_ML_PLUS_DOMAIN_PLUS_REDIRECT": {
+      "available_signals": [
+        "ml",
+        "rules"
+      ],
+      "configuration": "RULE_PLUS_ML_PLUS_DOMAIN_PLUS_REDIRECT",
+      "confusion_counts": {
+        "fn": 89,
+        "fp": 24,
+        "tn": 22839,
+        "tp": 367
+      },
+      "latency": {
+        "count": 23319,
+        "median_ms": 0.006999998731771484,
+        "p95_ms": 0.012500000593718141
+      },
+      "metrics": {
+        "accuracy": 0.9951541661306231,
+        "benign_false_positives": 24,
+        "confusion_matrix": [
+          [
+            22839,
+            24
+          ],
+          [
+            89,
+            367
+          ]
+        ],
+        "f1": 0.8665879574970484,
+        "false_negative_rate": 0.19517543859649122,
+        "false_positive_rate": 0.0010497310064296024,
+        "malicious_false_negatives": 89,
+        "pr_auc_average_precision": 0.9166228558748274,
+        "precision": 0.9386189258312021,
+        "recall": 0.8048245614035088,
+        "roc_auc": 0.9889177795119826,
+        "threshold": 30
+      },
+      "score_distribution": {
+        "max": 99.86547381937595,
+        "mean": 4.512502558147139,
+        "median": 3.659121764249906,
+        "min": 0.0016271784944953977,
+        "q25": 2.4018199842603396,
+        "q75": 3.8571189326975457
+      },
+      "status": "partial_unavailable",
+      "threshold": 30,
+      "unavailable_signals": [
+        "domain",
+        "redirect",
+        "reputation"
+      ]
+    },
+    "RULE_PLUS_ML_PLUS_REDIRECT": {
+      "available_signals": [
+        "ml",
+        "rules"
+      ],
+      "configuration": "RULE_PLUS_ML_PLUS_REDIRECT",
+      "confusion_counts": {
+        "fn": 89,
+        "fp": 24,
+        "tn": 22839,
+        "tp": 367
+      },
+      "latency": {
+        "count": 23319,
+        "median_ms": 0.00679999720887281,
+        "p95_ms": 0.012800002878066152
+      },
+      "metrics": {
+        "accuracy": 0.9951541661306231,
+        "benign_false_positives": 24,
+        "confusion_matrix": [
+          [
+            22839,
+            24
+          ],
+          [
+            89,
+            367
+          ]
+        ],
+        "f1": 0.8665879574970484,
+        "false_negative_rate": 0.19517543859649122,
+        "false_positive_rate": 0.0010497310064296024,
+        "malicious_false_negatives": 89,
+        "pr_auc_average_precision": 0.9166228558748274,
+        "precision": 0.9386189258312021,
+        "recall": 0.8048245614035088,
+        "roc_auc": 0.9889177795119826,
+        "threshold": 30
+      },
+      "score_distribution": {
+        "max": 99.86547381937595,
+        "mean": 4.512502558147139,
+        "median": 3.659121764249906,
+        "min": 0.0016271784944953977,
+        "q25": 2.4018199842603396,
+        "q75": 3.8571189326975457
+      },
+      "status": "partial_unavailable",
+      "threshold": 30,
+      "unavailable_signals": [
+        "domain",
+        "redirect",
+        "reputation"
+      ]
+    },
+    "RULE_PLUS_ML_PLUS_REPUTATION": {
+      "available_signals": [
+        "ml",
+        "rules"
+      ],
+      "configuration": "RULE_PLUS_ML_PLUS_REPUTATION",
+      "confusion_counts": {
+        "fn": 89,
+        "fp": 24,
+        "tn": 22839,
+        "tp": 367
+      },
+      "latency": {
+        "count": 23319,
+        "median_ms": 0.00679999720887281,
+        "p95_ms": 0.012699998478638008
+      },
+      "metrics": {
+        "accuracy": 0.9951541661306231,
+        "benign_false_positives": 24,
+        "confusion_matrix": [
+          [
+            22839,
+            24
+          ],
+          [
+            89,
+            367
+          ]
+        ],
+        "f1": 0.8665879574970484,
+        "false_negative_rate": 0.19517543859649122,
+        "false_positive_rate": 0.0010497310064296024,
+        "malicious_false_negatives": 89,
+        "pr_auc_average_precision": 0.9166228558748274,
+        "precision": 0.9386189258312021,
+        "recall": 0.8048245614035088,
+        "roc_auc": 0.9889177795119826,
+        "threshold": 30
+      },
+      "score_distribution": {
+        "max": 99.86547381937595,
+        "mean": 4.512502558147139,
+        "median": 3.659121764249906,
+        "min": 0.0016271784944953977,
+        "q25": 2.4018199842603396,
+        "q75": 3.8571189326975457
+      },
+      "status": "partial_unavailable",
+      "threshold": 30,
+      "unavailable_signals": [
+        "domain",
+        "redirect",
+        "reputation"
+      ]
+    },
+    "RULE_PLUS_ML_PLUS_REPUTATION_PLUS_DOMAIN": {
+      "available_signals": [
+        "ml",
+        "rules"
+      ],
+      "configuration": "RULE_PLUS_ML_PLUS_REPUTATION_PLUS_DOMAIN",
+      "confusion_counts": {
+        "fn": 89,
+        "fp": 24,
+        "tn": 22839,
+        "tp": 367
+      },
+      "latency": {
+        "count": 23319,
+        "median_ms": 0.006400001439033076,
+        "p95_ms": 0.011500000255182385
+      },
+      "metrics": {
+        "accuracy": 0.9951541661306231,
+        "benign_false_positives": 24,
+        "confusion_matrix": [
+          [
+            22839,
+            24
+          ],
+          [
+            89,
+            367
+          ]
+        ],
+        "f1": 0.8665879574970484,
+        "false_negative_rate": 0.19517543859649122,
+        "false_positive_rate": 0.0010497310064296024,
+        "malicious_false_negatives": 89,
+        "pr_auc_average_precision": 0.9166228558748274,
+        "precision": 0.9386189258312021,
+        "recall": 0.8048245614035088,
+        "roc_auc": 0.9889177795119826,
+        "threshold": 30
+      },
+      "score_distribution": {
+        "max": 99.86547381937595,
+        "mean": 4.512502558147139,
+        "median": 3.659121764249906,
+        "min": 0.0016271784944953977,
+        "q25": 2.4018199842603396,
+        "q75": 3.8571189326975457
+      },
+      "status": "partial_unavailable",
+      "threshold": 30,
+      "unavailable_signals": [
+        "domain",
+        "redirect",
+        "reputation"
+      ]
+    },
+    "RULE_PLUS_ML_PLUS_REPUTATION_PLUS_REDIRECT": {
+      "available_signals": [
+        "ml",
+        "rules"
+      ],
+      "configuration": "RULE_PLUS_ML_PLUS_REPUTATION_PLUS_REDIRECT",
+      "confusion_counts": {
+        "fn": 89,
+        "fp": 24,
+        "tn": 22839,
+        "tp": 367
+      },
+      "latency": {
+        "count": 23319,
+        "median_ms": 0.006899997970322147,
+        "p95_ms": 0.011900003300979733
+      },
+      "metrics": {
+        "accuracy": 0.9951541661306231,
+        "benign_false_positives": 24,
+        "confusion_matrix": [
+          [
+            22839,
+            24
+          ],
+          [
+            89,
+            367
+          ]
+        ],
+        "f1": 0.8665879574970484,
+        "false_negative_rate": 0.19517543859649122,
+        "false_positive_rate": 0.0010497310064296024,
+        "malicious_false_negatives": 89,
+        "pr_auc_average_precision": 0.9166228558748274,
+        "precision": 0.9386189258312021,
+        "recall": 0.8048245614035088,
+        "roc_auc": 0.9889177795119826,
+        "threshold": 30
+      },
+      "score_distribution": {
+        "max": 99.86547381937595,
+        "mean": 4.512502558147139,
+        "median": 3.659121764249906,
+        "min": 0.0016271784944953977,
+        "q25": 2.4018199842603396,
+        "q75": 3.8571189326975457
+      },
+      "status": "partial_unavailable",
+      "threshold": 30,
+      "unavailable_signals": [
+        "domain",
+        "redirect",
+        "reputation"
+      ]
+    },
+    "RULE_PLUS_REPUTATION": {
+      "available_signals": [
+        "rules"
+      ],
+      "configuration": "RULE_PLUS_REPUTATION",
+      "confusion_counts": {
+        "fn": 449,
+        "fp": 0,
+        "tn": 22863,
+        "tp": 7
+      },
+      "latency": {
+        "count": 23319,
+        "median_ms": 0.007099999493220821,
+        "p95_ms": 0.012200001947348937
+      },
+      "metrics": {
+        "accuracy": 0.9807453149792015,
+        "benign_false_positives": 0,
+        "confusion_matrix": [
+          [
+            22863,
+            0
+          ],
+          [
+            449,
+            7
+          ]
+        ],
+        "f1": 0.03023758099352052,
+        "false_negative_rate": 0.9846491228070176,
+        "false_positive_rate": 0.0,
+        "malicious_false_negatives": 449,
+        "pr_auc_average_precision": 0.1019385893036712,
+        "precision": 1.0,
+        "recall": 0.015350877192982455,
+        "roc_auc": 0.3476023468547588,
+        "threshold": 30
+      },
+      "score_distribution": {
+        "max": 53.92962190010342,
+        "mean": 4.868261011032834,
+        "median": 7.225651367144714,
+        "min": 0.0,
+        "q25": 0.0,
+        "q75": 7.225651367144714
+      },
+      "status": "partial_unavailable",
+      "threshold": 30,
+      "unavailable_signals": [
+        "domain",
+        "redirect",
+        "reputation"
+      ]
+    },
+    "WITHOUT_DOMAIN_INTELLIGENCE": {
+      "available_signals": [
+        "ml",
+        "rules"
+      ],
+      "configuration": "WITHOUT_DOMAIN_INTELLIGENCE",
+      "confusion_counts": {
+        "fn": 89,
+        "fp": 24,
+        "tn": 22839,
+        "tp": 367
+      },
+      "latency": {
+        "count": 23319,
+        "median_ms": 0.006399997801054269,
+        "p95_ms": 0.01179999890155159
+      },
+      "metrics": {
+        "accuracy": 0.9951541661306231,
+        "benign_false_positives": 24,
+        "confusion_matrix": [
+          [
+            22839,
+            24
+          ],
+          [
+            89,
+            367
+          ]
+        ],
+        "f1": 0.8665879574970484,
+        "false_negative_rate": 0.19517543859649122,
+        "false_positive_rate": 0.0010497310064296024,
+        "malicious_false_negatives": 89,
+        "pr_auc_average_precision": 0.9166228558748274,
+        "precision": 0.9386189258312021,
+        "recall": 0.8048245614035088,
+        "roc_auc": 0.9889177795119826,
+        "threshold": 30
+      },
+      "score_distribution": {
+        "max": 99.86547381937595,
+        "mean": 4.512502558147139,
+        "median": 3.659121764249906,
+        "min": 0.0016271784944953977,
+        "q25": 2.4018199842603396,
+        "q75": 3.8571189326975457
+      },
+      "status": "partial_unavailable",
+      "threshold": 30,
+      "unavailable_signals": [
+        "domain",
+        "redirect",
+        "reputation"
+      ]
+    },
+    "WITHOUT_ML": {
+      "available_signals": [
+        "rules"
+      ],
+      "configuration": "WITHOUT_ML",
+      "confusion_counts": {
+        "fn": 449,
+        "fp": 0,
+        "tn": 22863,
+        "tp": 7
+      },
+      "latency": {
+        "count": 23319,
+        "median_ms": 0.005799996870337054,
+        "p95_ms": 0.01089999932446517
+      },
+      "metrics": {
+        "accuracy": 0.9807453149792015,
+        "benign_false_positives": 0,
+        "confusion_matrix": [
+          [
+            22863,
+            0
+          ],
+          [
+            449,
+            7
+          ]
+        ],
+        "f1": 0.03023758099352052,
+        "false_negative_rate": 0.9846491228070176,
+        "false_positive_rate": 0.0,
+        "malicious_false_negatives": 449,
+        "pr_auc_average_precision": 0.1019385893036712,
+        "precision": 1.0,
+        "recall": 0.015350877192982455,
+        "roc_auc": 0.3476023468547588,
+        "threshold": 30
+      },
+      "score_distribution": {
+        "max": 53.92962190010342,
+        "mean": 4.868261011032834,
+        "median": 7.225651367144714,
+        "min": 0.0,
+        "q25": 0.0,
+        "q75": 7.225651367144714
+      },
+      "status": "partial_unavailable",
+      "threshold": 30,
+      "unavailable_signals": [
+        "domain",
+        "redirect",
+        "reputation"
+      ]
+    },
+    "WITHOUT_REDIRECT_ANALYSIS": {
+      "available_signals": [
+        "ml",
+        "rules"
+      ],
+      "configuration": "WITHOUT_REDIRECT_ANALYSIS",
+      "confusion_counts": {
+        "fn": 89,
+        "fp": 24,
+        "tn": 22839,
+        "tp": 367
+      },
+      "latency": {
+        "count": 23319,
+        "median_ms": 0.006800000846851617,
+        "p95_ms": 0.013599998055724427
+      },
+      "metrics": {
+        "accuracy": 0.9951541661306231,
+        "benign_false_positives": 24,
+        "confusion_matrix": [
+          [
+            22839,
+            24
+          ],
+          [
+            89,
+            367
+          ]
+        ],
+        "f1": 0.8665879574970484,
+        "false_negative_rate": 0.19517543859649122,
+        "false_positive_rate": 0.0010497310064296024,
+        "malicious_false_negatives": 89,
+        "pr_auc_average_precision": 0.9166228558748274,
+        "precision": 0.9386189258312021,
+        "recall": 0.8048245614035088,
+        "roc_auc": 0.9889177795119826,
+        "threshold": 30
+      },
+      "score_distribution": {
+        "max": 99.86547381937595,
+        "mean": 4.512502558147139,
+        "median": 3.659121764249906,
+        "min": 0.0016271784944953977,
+        "q25": 2.4018199842603396,
+        "q75": 3.8571189326975457
+      },
+      "status": "partial_unavailable",
+      "threshold": 30,
+      "unavailable_signals": [
+        "domain",
+        "redirect",
+        "reputation"
+      ]
+    },
+    "WITHOUT_REPUTATION": {
+      "available_signals": [
+        "ml",
+        "rules"
+      ],
+      "configuration": "WITHOUT_REPUTATION",
+      "confusion_counts": {
+        "fn": 89,
+        "fp": 24,
+        "tn": 22839,
+        "tp": 367
+      },
+      "latency": {
+        "count": 23319,
+        "median_ms": 0.007400001777568832,
+        "p95_ms": 0.014900000678608194
+      },
+      "metrics": {
+        "accuracy": 0.9951541661306231,
+        "benign_false_positives": 24,
+        "confusion_matrix": [
+          [
+            22839,
+            24
+          ],
+          [
+            89,
+            367
+          ]
+        ],
+        "f1": 0.8665879574970484,
+        "false_negative_rate": 0.19517543859649122,
+        "false_positive_rate": 0.0010497310064296024,
+        "malicious_false_negatives": 89,
+        "pr_auc_average_precision": 0.9166228558748274,
+        "precision": 0.9386189258312021,
+        "recall": 0.8048245614035088,
+        "roc_auc": 0.9889177795119826,
+        "threshold": 30
+      },
+      "score_distribution": {
+        "max": 99.86547381937595,
+        "mean": 4.512502558147139,
+        "median": 3.659121764249906,
+        "min": 0.0016271784944953977,
+        "q25": 2.4018199842603396,
+        "q75": 3.8571189326975457
+      },
+      "status": "partial_unavailable",
+      "threshold": 30,
+      "unavailable_signals": [
+        "domain",
+        "redirect",
+        "reputation"
+      ]
+    },
+    "WITHOUT_RULES": {
+      "available_signals": [
+        "ml"
+      ],
+      "configuration": "WITHOUT_RULES",
+      "confusion_counts": {
+        "fn": 65,
+        "fp": 81,
+        "tn": 22782,
+        "tp": 391
+      },
+      "latency": {
+        "count": 23319,
+        "median_ms": 0.00540000110049732,
+        "p95_ms": 0.00960000033956021
+      },
+      "metrics": {
+        "accuracy": 0.9937390111068227,
+        "benign_false_positives": 81,
+        "confusion_matrix": [
+          [
+            22782,
+            81
+          ],
+          [
+            65,
+            391
+          ]
+        ],
+        "f1": 0.8426724137931034,
+        "false_negative_rate": 0.1425438596491228,
+        "false_positive_rate": 0.0035428421466999083,
+        "malicious_false_negatives": 65,
+        "pr_auc_average_precision": 0.9193414226335381,
+        "precision": 0.8283898305084746,
+        "recall": 0.8574561403508771,
+        "roc_auc": 0.9931217872130791,
+        "threshold": 20
+      },
+      "score_distribution": null,
+      "status": "partial_unavailable",
+      "threshold": 20,
+      "unavailable_signals": [
+        "domain",
+        "redirect",
+        "reputation"
+      ]
+    }
+  },
+  "sorted_f1": [
+    [
+      "FULL_SCAMSHIELD",
+      0.8665879574970484,
+      "partial_unavailable"
+    ],
+    [
+      "RULE_PLUS_ML",
+      0.8665879574970484,
+      "available"
+    ],
+    [
+      "RULE_PLUS_ML_PLUS_DOMAIN",
+      0.8665879574970484,
+      "partial_unavailable"
+    ],
+    [
+      "RULE_PLUS_ML_PLUS_DOMAIN_PLUS_REDIRECT",
+      0.8665879574970484,
+      "partial_unavailable"
+    ],
+    [
+      "RULE_PLUS_ML_PLUS_REDIRECT",
+      0.8665879574970484,
+      "partial_unavailable"
+    ],
+    [
+      "RULE_PLUS_ML_PLUS_REPUTATION",
+      0.8665879574970484,
+      "partial_unavailable"
+    ],
+    [
+      "RULE_PLUS_ML_PLUS_REPUTATION_PLUS_DOMAIN",
+      0.8665879574970484,
+      "partial_unavailable"
+    ],
+    [
+      "RULE_PLUS_ML_PLUS_REPUTATION_PLUS_REDIRECT",
+      0.8665879574970484,
+      "partial_unavailable"
+    ],
+    [
+      "WITHOUT_DOMAIN_INTELLIGENCE",
+      0.8665879574970484,
+      "partial_unavailable"
+    ],
+    [
+      "WITHOUT_REDIRECT_ANALYSIS",
+      0.8665879574970484,
+      "partial_unavailable"
+    ],
+    [
+      "WITHOUT_REPUTATION",
+      0.8665879574970484,
+      "partial_unavailable"
+    ],
+    [
+      "ML_ONLY",
+      0.8426724137931034,
+      "available"
+    ],
+    [
+      "ML_PLUS_DOMAIN",
+      0.8426724137931034,
+      "partial_unavailable"
+    ],
+    [
+      "ML_PLUS_REDIRECT",
+      0.8426724137931034,
+      "partial_unavailable"
+    ],
+    [
+      "ML_PLUS_REPUTATION",
+      0.8426724137931034,
+      "partial_unavailable"
+    ],
+    [
+      "WITHOUT_RULES",
+      0.8426724137931034,
+      "partial_unavailable"
+    ],
+    [
+      "RULE_ONLY",
+      0.03023758099352052,
+      "available"
+    ],
+    [
+      "RULE_PLUS_REPUTATION",
+      0.03023758099352052,
+      "partial_unavailable"
+    ],
+    [
+      "WITHOUT_ML",
+      0.03023758099352052,
+      "partial_unavailable"
+    ],
+    [
+      "DOMAIN_INTELLIGENCE_ONLY",
+      null,
+      "unavailable"
+    ],
+    [
+      "REDIRECT_ONLY",
+      null,
+      "unavailable"
+    ],
+    [
+      "REPUTATION_ONLY",
+      null,
+      "unavailable"
+    ]
+  ],
+  "sorted_fpr": [
+    [
+      "DOMAIN_INTELLIGENCE_ONLY",
+      null,
+      "unavailable"
+    ],
+    [
+      "REDIRECT_ONLY",
+      null,
+      "unavailable"
+    ],
+    [
+      "REPUTATION_ONLY",
+      null,
+      "unavailable"
+    ],
+    [
+      "ML_ONLY",
+      0.0035428421466999083,
+      "available"
+    ],
+    [
+      "ML_PLUS_DOMAIN",
+      0.0035428421466999083,
+      "partial_unavailable"
+    ],
+    [
+      "ML_PLUS_REDIRECT",
+      0.0035428421466999083,
+      "partial_unavailable"
+    ],
+    [
+      "ML_PLUS_REPUTATION",
+      0.0035428421466999083,
+      "partial_unavailable"
+    ],
+    [
+      "WITHOUT_RULES",
+      0.0035428421466999083,
+      "partial_unavailable"
+    ],
+    [
+      "FULL_SCAMSHIELD",
+      0.0010497310064296024,
+      "partial_unavailable"
+    ],
+    [
+      "RULE_PLUS_ML",
+      0.0010497310064296024,
+      "available"
+    ],
+    [
+      "RULE_PLUS_ML_PLUS_DOMAIN",
+      0.0010497310064296024,
+      "partial_unavailable"
+    ],
+    [
+      "RULE_PLUS_ML_PLUS_DOMAIN_PLUS_REDIRECT",
+      0.0010497310064296024,
+      "partial_unavailable"
+    ],
+    [
+      "RULE_PLUS_ML_PLUS_REDIRECT",
+      0.0010497310064296024,
+      "partial_unavailable"
+    ],
+    [
+      "RULE_PLUS_ML_PLUS_REPUTATION",
+      0.0010497310064296024,
+      "partial_unavailable"
+    ],
+    [
+      "RULE_PLUS_ML_PLUS_REPUTATION_PLUS_DOMAIN",
+      0.0010497310064296024,
+      "partial_unavailable"
+    ],
+    [
+      "RULE_PLUS_ML_PLUS_REPUTATION_PLUS_REDIRECT",
+      0.0010497310064296024,
+      "partial_unavailable"
+    ],
+    [
+      "WITHOUT_DOMAIN_INTELLIGENCE",
+      0.0010497310064296024,
+      "partial_unavailable"
+    ],
+    [
+      "WITHOUT_REDIRECT_ANALYSIS",
+      0.0010497310064296024,
+      "partial_unavailable"
+    ],
+    [
+      "WITHOUT_REPUTATION",
+      0.0010497310064296024,
+      "partial_unavailable"
+    ],
+    [
+      "RULE_ONLY",
+      0.0,
+      "available"
+    ],
+    [
+      "RULE_PLUS_REPUTATION",
+      0.0,
+      "partial_unavailable"
+    ],
+    [
+      "WITHOUT_ML",
+      0.0,
+      "partial_unavailable"
+    ]
+  ],
+  "sorted_recall": [
+    [
+      "ML_ONLY",
+      0.8574561403508771,
+      "available"
+    ],
+    [
+      "ML_PLUS_DOMAIN",
+      0.8574561403508771,
+      "partial_unavailable"
+    ],
+    [
+      "ML_PLUS_REDIRECT",
+      0.8574561403508771,
+      "partial_unavailable"
+    ],
+    [
+      "ML_PLUS_REPUTATION",
+      0.8574561403508771,
+      "partial_unavailable"
+    ],
+    [
+      "WITHOUT_RULES",
+      0.8574561403508771,
+      "partial_unavailable"
+    ],
+    [
+      "FULL_SCAMSHIELD",
+      0.8048245614035088,
+      "partial_unavailable"
+    ],
+    [
+      "RULE_PLUS_ML",
+      0.8048245614035088,
+      "available"
+    ],
+    [
+      "RULE_PLUS_ML_PLUS_DOMAIN",
+      0.8048245614035088,
+      "partial_unavailable"
+    ],
+    [
+      "RULE_PLUS_ML_PLUS_DOMAIN_PLUS_REDIRECT",
+      0.8048245614035088,
+      "partial_unavailable"
+    ],
+    [
+      "RULE_PLUS_ML_PLUS_REDIRECT",
+      0.8048245614035088,
+      "partial_unavailable"
+    ],
+    [
+      "RULE_PLUS_ML_PLUS_REPUTATION",
+      0.8048245614035088,
+      "partial_unavailable"
+    ],
+    [
+      "RULE_PLUS_ML_PLUS_REPUTATION_PLUS_DOMAIN",
+      0.8048245614035088,
+      "partial_unavailable"
+    ],
+    [
+      "RULE_PLUS_ML_PLUS_REPUTATION_PLUS_REDIRECT",
+      0.8048245614035088,
+      "partial_unavailable"
+    ],
+    [
+      "WITHOUT_DOMAIN_INTELLIGENCE",
+      0.8048245614035088,
+      "partial_unavailable"
+    ],
+    [
+      "WITHOUT_REDIRECT_ANALYSIS",
+      0.8048245614035088,
+      "partial_unavailable"
+    ],
+    [
+      "WITHOUT_REPUTATION",
+      0.8048245614035088,
+      "partial_unavailable"
+    ],
+    [
+      "RULE_ONLY",
+      0.015350877192982455,
+      "available"
+    ],
+    [
+      "RULE_PLUS_REPUTATION",
+      0.015350877192982455,
+      "partial_unavailable"
+    ],
+    [
+      "WITHOUT_ML",
+      0.015350877192982455,
+      "partial_unavailable"
+    ],
+    [
+      "DOMAIN_INTELLIGENCE_ONLY",
+      null,
+      "unavailable"
+    ],
+    [
+      "REDIRECT_ONLY",
+      null,
+      "unavailable"
+    ],
+    [
+      "REPUTATION_ONLY",
+      null,
+      "unavailable"
+    ]
+  ],
+  "split": {
+    "seed": 42,
+    "strategy": "domain_grouped",
+    "test_count": 23319,
+    "train_count": 69960,
+    "validation_count": 23320
+  },
+  "test_untouched": true,
+  "thresholds": {
+    "dangerous": 70,
+    "ml": 20,
+    "suspicious": 30
+  }
+}

@@ -1,0 +1,193 @@
+{
+  "phishvn": {
+    "file": "data\\challenge_sources\\url_test.csv",
+    "sha256": "b692882e8ae26b2c0b217c090e92d3a19307a26acbfb3c8c89692db26d409bc9",
+    "bytes": 1961206,
+    "rows": 8941,
+    "columns": [
+      "channel",
+      "label",
+      "source",
+      "is_llm",
+      "lang",
+      "scenario",
+      "impersonated_org",
+      "collected_at",
+      "scraped_at",
+      "label_source",
+      "split",
+      "url",
+      "url_norm",
+      "domain",
+      "tld",
+      "url_len",
+      "num_dots",
+      "num_subdomains",
+      "has_ip",
+      "has_at",
+      "suspicious_tld",
+      "status",
+      "tier",
+      "rank",
+      "text",
+      "msg_len",
+      "gen_model",
+      "has_url",
+      "id"
+    ],
+    "label_values": {
+      "phishing": 5096,
+      "benign": 3845
+    },
+    "url_key": "url",
+    "label_key": "label",
+    "missing_url": 0,
+    "missing_label": 0,
+    "malformed_url": 0,
+    "exact_duplicate_rows": 0,
+    "normalized_duplicate_rows": 2,
+    "unique_hosts": 8920,
+    "unique_registered_domains": 3962,
+    "host_counts": {
+      "www.roblox.com.bn": 4,
+      "sokhdt.camau.gov.vn": 2,
+      "sotaichinh.camau.gov.vn": 2,
+      "soxaydung.camau.gov.vn": 2,
+      "sotnmt.camau.gov.vn": 2,
+      "socongthuong.camau.gov.vn": 2,
+      "sokhcn.camau.gov.vn": 2,
+      "sonnptnt.camau.gov.vn": 2,
+      "sotuphap.camau.gov.vn": 2,
+      "soyte.camau.gov.vn": 2
+    },
+    "label_host_conflicts": 0,
+    "overlap_base_exact": 0,
+    "overlap_base_normalized": 10,
+    "overlap_base_hosts": 14,
+    "overlap_base_registered_domains": 104,
+    "partition_overlap": {
+      "train": 10,
+      "validation": 0,
+      "test": 0
+    },
+    "partition_host_overlap": {
+      "train": 14,
+      "validation": 0,
+      "test": 0
+    }
+  },
+  "second": {
+    "file": "data\\challenge_sources\\Phishing Detection External Evaluation Dataset (1000 URLs).csv",
+    "sha256": "df25f4cae492c91cdca83887737a3d1672df71ebe8b581eeac21715a704b869f",
+    "bytes": 104074,
+    "rows": 1000,
+    "columns": [
+      "URL",
+      "Using the IP Address",
+      "Long URL",
+      "URL Shortening Services",
+      "URL having @ Symbol",
+      "Redirecting using //",
+      "Prefix/Suffix with - in Domain",
+      "Sub Domain and Multi Sub Domains",
+      "HTTPS",
+      "Domain Registration Length",
+      "Favicon",
+      "HTTPS Token in Domain",
+      "Request URL",
+      "URL of Anchor",
+      "Links in Meta/Script/Link Tags",
+      "Server Form Handler (SFH)",
+      "Submitting to Email",
+      "Abnormal URL",
+      "Website Forwarding",
+      "Status Bar Customization",
+      "Using Pop-up Window",
+      "Age of Domain",
+      "DNS Record",
+      "Website Traffic",
+      "PageRank",
+      "Google Index",
+      "Number of Links Pointing to Page",
+      "Statistical-Reports Based Feature",
+      "Results"
+    ],
+    "label_values": {
+      "1": 500,
+      "0": 500
+    },
+    "url_key": "URL",
+    "label_key": "Results",
+    "missing_url": 0,
+    "missing_label": 0,
+    "malformed_url": 0,
+    "exact_duplicate_rows": 2,
+    "normalized_duplicate_rows": 6,
+    "unique_hosts": 901,
+    "unique_registered_domains": 762,
+    "host_counts": {
+      "blinq.me": 7,
+      "tinyurl.com": 5,
+      "eu.jotform.com": 4,
+      "l.ead.me": 4,
+      "docs.google.com": 3,
+      "s.id": 3,
+      "rb.gy": 3,
+      "bit.ly": 3,
+      "qrco.de": 3,
+      "q-r.to": 3
+    },
+    "label_host_conflicts": 3,
+    "overlap_base_exact": 0,
+    "overlap_base_normalized": 5,
+    "overlap_base_hosts": 37,
+    "overlap_base_registered_domains": 142,
+    "partition_overlap": {
+      "train": 5,
+      "validation": 0,
+      "test": 0
+    },
+    "partition_host_overlap": {
+      "train": 35,
+      "validation": 0,
+      "test": 2
+    }
+  },
+  "cross_source": {
+    "exact": 0,
+    "normalized": 41,
+    "hosts": 41,
+    "registered_domains": 44
+  },
+  "base_audit": {
+    "source_path": "data\\Dataset.csv",
+    "dataset_fingerprint": "d68b3cd0648dcf9c775347416ad1a8995e8a025921fbe3871ca6158d4db3c3a1",
+    "total_rows": 116600,
+    "accepted_rows": 116599,
+    "rejected_rows": 1,
+    "benign_count": 100000,
+    "malicious_count": 16599,
+    "exact_duplicate_urls": 1369,
+    "normalized_duplicate_urls": 1513,
+    "conflicting_label_urls": 0,
+    "identical_domains_across_labels": 3,
+    "unique_domains": 103004,
+    "unique_hosts": 103004,
+    "timestamp_coverage": 0.0,
+    "malformed_records": 1,
+    "source_distribution": {},
+    "campaign_distribution": {},
+    "rejected_records": [
+      {
+        "row_number": 106672,
+        "reason": "URL contains malformed percent encoding",
+        "url": "https://pub-7c011d83de584d9ba78501096d634632.r2.dev/ref.html#YVc1bWIwQm1ZVzFsZEdWamFDNWpiMjB1ZEhjPQ==&amp;target=_blank&amp;interceptiontype=VerifyLogin&amp;interceptiontype=VerifyLogin&amp;service=freemail&amp;successURL=https%3A%2F%sharepoint%2Flogin&amp;statistics=xRbXFc8VKmF6s%2Frp6a5qP4z%2FNdyBHKIvfVNtKKZ%2FMq1vzDMmvcNacavpkSKc0VdsoMzKeZnxxL%2Fl2FTNDJCnPcIHjxpzAgCgOro1V2sZbBxg%3D%3D&amp;username=sdada&amp;requestSecurityToken=9f8d7962-0d22-4c86-8ab0-862cfe04d2e9"
+      }
+    ]
+  },
+  "partition_sizes": {
+    "train": 69960,
+    "validation": 23320,
+    "test": 23319
+  }
+}

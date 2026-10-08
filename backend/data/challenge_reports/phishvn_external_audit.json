@@ -1,0 +1,123 @@
+{
+  "benign_count": 3845,
+  "bytes": 1961206,
+  "category_distribution": {
+    "bank": 222,
+    "delivery": 31,
+    "ecommerce": 491,
+    "gaming": 22,
+    "gov": 2495,
+    "other": 5616,
+    "social": 46,
+    "tax": 6,
+    "telecom": 12
+  },
+  "columns": [
+    "channel",
+    "label",
+    "source",
+    "is_llm",
+    "lang",
+    "scenario",
+    "impersonated_org",
+    "collected_at",
+    "scraped_at",
+    "label_source",
+    "split",
+    "url",
+    "url_norm",
+    "domain",
+    "tld",
+    "url_len",
+    "num_dots",
+    "num_subdomains",
+    "has_ip",
+    "has_at",
+    "suspicious_tld",
+    "status",
+    "tier",
+    "rank",
+    "text",
+    "msg_len",
+    "gen_model",
+    "has_url",
+    "id"
+  ],
+  "conflicting_normalized_urls": 0,
+  "date_fields": {
+    "count": 8941,
+    "max": "31/10/2024",
+    "min": "01/03/2024",
+    "unique": 577
+  },
+  "exact_duplicate_rows": 0,
+  "filename": "url_test.csv",
+  "invalid_labels": 0,
+  "label_field": "label",
+  "label_mapping": {
+    "0": 0,
+    "1": 1,
+    "benign": 0,
+    "legitimate": 0,
+    "malicious": 1,
+    "phishing": 1
+  },
+  "label_values": {
+    "benign": 3845,
+    "phishing": 5096
+  },
+  "malformed_urls": 0,
+  "malicious_count": 5096,
+  "missing_urls": 0,
+  "normalized_duplicate_rows": 2,
+  "overlap": {
+    "exact_base": 0,
+    "exact_other": 0,
+    "hosts_base": 14,
+    "hosts_other": 41,
+    "normalized_base": 10,
+    "normalized_other": 41,
+    "partition_hosts": {
+      "test": 0,
+      "train": 0,
+      "validation": 0
+    },
+    "partition_normalized": {
+      "test": 0,
+      "train": 10,
+      "validation": 0
+    },
+    "registered_domains_base": 104
+  },
+  "path": "data\\challenge_sources\\url_test.csv",
+  "provenance": {
+    "doi": "10.17632/b97hxbxtpd.4",
+    "label_semantics": "phishing/benign as supplied",
+    "notes": "Official held-out test split; no train/validation files used.",
+    "official_split": "data/splits/url_test.csv",
+    "publisher": "PhishVN v3.1.0 Open"
+  },
+  "provenance_fields": [
+    "label",
+    "source",
+    "collected_at",
+    "scraped_at",
+    "label_source",
+    "id"
+  ],
+  "row_count": 8941,
+  "sha256": "b692882e8ae26b2c0b217c090e92d3a19307a26acbfb3c8c89692db26d409bc9",
+  "source_distribution": {
+    "chongluadao": 4579,
+    "openphish": 30,
+    "tinnhiem_org": 358,
+    "tinnhiem_web": 2246,
+    "tinnhiemmang": 487,
+    "tranco": 888,
+    "tranco_vn": 353
+  },
+  "source_name": "PhishVN v3.1.0 Open",
+  "unique_hosts": 8920,
+  "unique_registered_domains": 3962,
+  "url_field": "url"
+}

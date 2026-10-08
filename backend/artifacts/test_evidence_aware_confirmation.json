@@ -1,0 +1,148 @@
+{
+  "artifact": "C:\\Users\\SHASHANK\\OneDrive\\Desktop\\3RD-YR-MP\\backend\\artifacts\\scamshield_domain_grouped_baseline.pkl",
+  "candidate_definition": "EVIDENCE_AWARE: if no rule evidence, final score equals ML score; otherwise final score is (ML score + rule score) / 2.",
+  "configurations": {
+    "CURRENT": {
+      "metrics": {
+        "accuracy": 0.9932244092799862,
+        "benign_false_positives": 10,
+        "confusion_matrix": [
+          [
+            22853,
+            10
+          ],
+          [
+            148,
+            308
+          ]
+        ],
+        "f1": 0.7958656330749354,
+        "false_negative_rate": 0.32456140350877194,
+        "false_positive_rate": 0.00043738791934566765,
+        "malicious_false_negatives": 148,
+        "pr_auc_average_precision": 0.8818106614559051,
+        "precision": 0.9685534591194969,
+        "recall": 0.6754385964912281,
+        "roc_auc": 0.9641641171555053,
+        "threshold": 30
+      },
+      "score_distribution": {
+        "count": 23319,
+        "max": 73.96194270097747,
+        "mean": 3.679877657018055,
+        "median": 3.6484972283514088,
+        "min": 0.0008135892472476989,
+        "q25": 1.2009099921301698,
+        "q75": 3.8137836030289822
+      },
+      "status": "available",
+      "threshold": 30
+    },
+    "EVIDENCE_AWARE": {
+      "metrics": {
+        "accuracy": 0.9951541661306231,
+        "benign_false_positives": 24,
+        "confusion_matrix": [
+          [
+            22839,
+            24
+          ],
+          [
+            89,
+            367
+          ]
+        ],
+        "f1": 0.8665879574970484,
+        "false_negative_rate": 0.19517543859649122,
+        "false_positive_rate": 0.0010497310064296024,
+        "malicious_false_negatives": 89,
+        "pr_auc_average_precision": 0.9166228558748274,
+        "precision": 0.9386189258312021,
+        "recall": 0.8048245614035088,
+        "roc_auc": 0.9889177795119826,
+        "threshold": 30
+      },
+      "score_distribution": {
+        "count": 23319,
+        "max": 99.86547381937595,
+        "mean": 4.512502558147139,
+        "median": 3.659121764249906,
+        "min": 0.0016271784944953977,
+        "q25": 2.4018199842603396,
+        "q75": 3.857118932697546
+      },
+      "status": "available",
+      "threshold": 30
+    },
+    "ML_ONLY_REFERENCE": {
+      "metrics": {
+        "accuracy": 0.9937390111068227,
+        "benign_false_positives": 81,
+        "confusion_matrix": [
+          [
+            22782,
+            81
+          ],
+          [
+            65,
+            391
+          ]
+        ],
+        "f1": 0.8426724137931034,
+        "false_negative_rate": 0.1425438596491228,
+        "false_positive_rate": 0.0035428421466999083,
+        "malicious_false_negatives": 65,
+        "pr_auc_average_precision": 0.9193414226335381,
+        "precision": 0.8283898305084746,
+        "recall": 0.8574561403508771,
+        "roc_auc": 0.9931217872130791,
+        "threshold": 20
+      },
+      "score_distribution": {
+        "count": 23319,
+        "max": 99.86547381937595,
+        "mean": 2.491494303003276,
+        "median": 0.3535188626695098,
+        "min": 9.728290626698978e-05,
+        "q25": 0.09485733351902195,
+        "q75": 1.1784466502677224
+      },
+      "status": "available",
+      "threshold": 20
+    }
+  },
+  "dataset": "C:\\Users\\SHASHANK\\OneDrive\\Desktop\\3RD-YR-MP\\backend\\data\\Dataset.csv",
+  "dataset_fingerprint": "d68b3cd0648dcf9c775347416ad1a8995e8a025921fbe3871ca6158d4db3c3a1",
+  "evidence_aware_comparison": {
+    "current_missed_malicious_ml_detected_cohort_count": 83,
+    "current_total_missed_malicious_count": 148,
+    "ml_only_false_positive_count": 81,
+    "ml_only_false_positives_still_suppressed": 57,
+    "new_false_negatives_vs_ml_only": 24,
+    "new_false_positives_vs_ml_only": 0,
+    "recovered_current_misses": 59,
+    "recovered_from_current_83_ml_detected_cohort": 59,
+    "rule_evidence_rate": 0.6575753677258888
+  },
+  "experiment": "one_test_only_confirmation",
+  "invariants": {
+    "additional_strategies_evaluated": false,
+    "additional_thresholds_used_for_selection": false,
+    "artifact_modified": false,
+    "dataset_modified": false,
+    "retrained": false,
+    "test_partition_tuned": false
+  },
+  "split": {
+    "seed": 42,
+    "strategy": "domain_grouped",
+    "test_count": 23319,
+    "train_count": 69960,
+    "validation_count": 23320
+  },
+  "test_used_for": "confirmation only; no tuning or selection",
+  "thresholds": {
+    "fusion": 30,
+    "ml_only": 20
+  }
+}

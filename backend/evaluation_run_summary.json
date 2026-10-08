@@ -1,0 +1,376 @@
+{
+  "reports_dir": "data\\challenge_reports",
+  "phishvn": {
+    "source_name": "PhishVN v3.1.0 Open",
+    "filename": "url_test.csv",
+    "path": "data\\challenge_sources\\url_test.csv",
+    "sha256": "b692882e8ae26b2c0b217c090e92d3a19307a26acbfb3c8c89692db26d409bc9",
+    "bytes": 1961206,
+    "row_count": 8941,
+    "columns": [
+      "channel",
+      "label",
+      "source",
+      "is_llm",
+      "lang",
+      "scenario",
+      "impersonated_org",
+      "collected_at",
+      "scraped_at",
+      "label_source",
+      "split",
+      "url",
+      "url_norm",
+      "domain",
+      "tld",
+      "url_len",
+      "num_dots",
+      "num_subdomains",
+      "has_ip",
+      "has_at",
+      "suspicious_tld",
+      "status",
+      "tier",
+      "rank",
+      "text",
+      "msg_len",
+      "gen_model",
+      "has_url",
+      "id"
+    ],
+    "url_field": "url",
+    "label_field": "label",
+    "label_values": {
+      "phishing": 5096,
+      "benign": 3845
+    },
+    "label_mapping": {
+      "phishing": 1,
+      "malicious": 1,
+      "1": 1,
+      "benign": 0,
+      "legitimate": 0,
+      "0": 0
+    },
+    "malicious_count": 5096,
+    "benign_count": 3845,
+    "invalid_labels": 0,
+    "missing_urls": 0,
+    "malformed_urls": 0,
+    "exact_duplicate_rows": 0,
+    "normalized_duplicate_rows": 2,
+    "conflicting_normalized_urls": 0,
+    "unique_hosts": 8920,
+    "unique_registered_domains": 3962,
+    "source_distribution": {
+      "tinnhiemmang": 487,
+      "tinnhiem_web": 2246,
+      "tinnhiem_org": 358,
+      "tranco": 888,
+      "tranco_vn": 353,
+      "openphish": 30,
+      "chongluadao": 4579
+    },
+    "category_distribution": {
+      "ecommerce": 491,
+      "telecom": 12,
+      "gov": 2495,
+      "other": 5616,
+      "gaming": 22,
+      "social": 46,
+      "delivery": 31,
+      "bank": 222,
+      "tax": 6
+    },
+    "date_fields": {
+      "count": 8941,
+      "unique": 577,
+      "min": "01/03/2024",
+      "max": "31/10/2024"
+    },
+    "provenance_fields": [
+      "label",
+      "source",
+      "collected_at",
+      "scraped_at",
+      "label_source",
+      "id"
+    ],
+    "overlap": {
+      "exact_base": 0,
+      "normalized_base": 10,
+      "hosts_base": 14,
+      "registered_domains_base": 104,
+      "partition_normalized": {
+        "train": 10,
+        "validation": 0,
+        "test": 0
+      },
+      "partition_hosts": {
+        "train": 0,
+        "validation": 0,
+        "test": 0
+      },
+      "exact_other": 0,
+      "normalized_other": 41,
+      "hosts_other": 41
+    },
+    "provenance": {
+      "publisher": "PhishVN v3.1.0 Open",
+      "doi": "10.17632/b97hxbxtpd.4",
+      "official_split": "data/splits/url_test.csv",
+      "label_semantics": "phishing/benign as supplied",
+      "notes": "Official held-out test split; no train/validation files used."
+    }
+  },
+  "second": {
+    "source_name": "PhishBench-External D4v v2",
+    "filename": "Phishing Detection External Evaluation Dataset (1000 URLs).csv",
+    "path": "data\\challenge_sources\\Phishing Detection External Evaluation Dataset (1000 URLs).csv",
+    "sha256": "df25f4cae492c91cdca83887737a3d1672df71ebe8b581eeac21715a704b869f",
+    "bytes": 104074,
+    "row_count": 1000,
+    "columns": [
+      "URL",
+      "Using the IP Address",
+      "Long URL",
+      "URL Shortening Services",
+      "URL having @ Symbol",
+      "Redirecting using //",
+      "Prefix/Suffix with - in Domain",
+      "Sub Domain and Multi Sub Domains",
+      "HTTPS",
+      "Domain Registration Length",
+      "Favicon",
+      "HTTPS Token in Domain",
+      "Request URL",
+      "URL of Anchor",
+      "Links in Meta/Script/Link Tags",
+      "Server Form Handler (SFH)",
+      "Submitting to Email",
+      "Abnormal URL",
+      "Website Forwarding",
+      "Status Bar Customization",
+      "Using Pop-up Window",
+      "Age of Domain",
+      "DNS Record",
+      "Website Traffic",
+      "PageRank",
+      "Google Index",
+      "Number of Links Pointing to Page",
+      "Statistical-Reports Based Feature",
+      "Results"
+    ],
+    "url_field": "URL",
+    "label_field": "Results",
+    "label_values": {
+      "1": 500,
+      "0": 500
+    },
+    "label_mapping": {
+      "phishing": 1,
+      "malicious": 1,
+      "1": 1,
+      "benign": 0,
+      "legitimate": 0,
+      "0": 0
+    },
+    "malicious_count": 500,
+    "benign_count": 500,
+    "invalid_labels": 0,
+    "missing_urls": 0,
+    "malformed_urls": 0,
+    "exact_duplicate_rows": 2,
+    "normalized_duplicate_rows": 6,
+    "conflicting_normalized_urls": 0,
+    "unique_hosts": 901,
+    "unique_registered_domains": 762,
+    "source_distribution": {
+      "<missing>": 1000
+    },
+    "category_distribution": {
+      "<missing>": 1000
+    },
+    "date_fields": {
+      "count": 0,
+      "unique": 0,
+      "min": null,
+      "max": null
+    },
+    "provenance_fields": [],
+    "overlap": {
+      "exact_base": 0,
+      "normalized_base": 5,
+      "hosts_base": 37,
+      "registered_domains_base": 142,
+      "partition_normalized": {
+        "train": 5,
+        "validation": 0,
+        "test": 0
+      },
+      "partition_hosts": {
+        "train": 0,
+        "validation": 0,
+        "test": 0
+      },
+      "exact_other": 0,
+      "normalized_other": 41,
+      "hosts_other": 41
+    },
+    "provenance": {
+      "publisher": "Mendeley Data / PhishBench-External",
+      "doi": "10.17632/2ctjcnm9kn.2",
+      "publication_date": "2025-10-27",
+      "reported_collection_period": "July 2025",
+      "label_semantics": "Results 1=phishing, 0=legitimate",
+      "reported_sources": "PhishTank for phishing URLs; Tranco for legitimate URLs",
+      "notes": "Identity/provenance is documented externally; raw CSV contains feature columns but no per-row feed identifiers."
+    }
+  },
+  "evaluations_summary": [
+    [
+      "PhishVN v3.1.0 Open",
+      {
+        "ML_ONLY": {
+          "accuracy": 0.5828207135667152,
+          "precision": 0.7179323548181238,
+          "recall": 0.44152276295133436,
+          "f1": 0.5467800729040098,
+          "pr_auc": 0.6699011820487989,
+          "roc_auc": 0.5093801609870716,
+          "fpr": 0.22990897269180754,
+          "fnr": 0.5584772370486656,
+          "tp": 2250,
+          "tn": 2961,
+          "fp": 884,
+          "fn": 2846,
+          "threshold": 20.0,
+          "total": 8941,
+          "malicious_count": 5096,
+          "benign_count": 3845
+        },
+        "RULE_PLUS_ML": {
+          "accuracy": 0.5402080304216531,
+          "precision": 0.7835348301669545,
+          "recall": 0.2670722135007849,
+          "f1": 0.3983608956534465,
+          "pr_auc": 0.6695985493654484,
+          "roc_auc": 0.5101122683743899,
+          "fpr": 0.09778933680104031,
+          "fnr": 0.7329277864992151,
+          "tp": 1361,
+          "tn": 3469,
+          "fp": 376,
+          "fn": 3735,
+          "threshold": 30.0,
+          "total": 8941,
+          "malicious_count": 5096,
+          "benign_count": 3845
+        },
+        "FULL_SCAMSHIELD": {
+          "accuracy": 0.5402080304216531,
+          "precision": 0.7835348301669545,
+          "recall": 0.2670722135007849,
+          "f1": 0.3983608956534465,
+          "pr_auc": 0.6695985493654484,
+          "roc_auc": 0.5101122683743899,
+          "fpr": 0.09778933680104031,
+          "fnr": 0.7329277864992151,
+          "tp": 1361,
+          "tn": 3469,
+          "fp": 376,
+          "fn": 3735,
+          "threshold": 30.0,
+          "total": 8941,
+          "malicious_count": 5096,
+          "benign_count": 3845
+        }
+      }
+    ],
+    [
+      "PhishBench-External D4v v2",
+      {
+        "ML_ONLY": {
+          "accuracy": 0.716,
+          "precision": 0.65,
+          "recall": 0.936,
+          "f1": 0.7672131147540984,
+          "pr_auc": 0.8893621018721198,
+          "roc_auc": 0.8811880000000001,
+          "fpr": 0.504,
+          "fnr": 0.064,
+          "tp": 468,
+          "tn": 248,
+          "fp": 252,
+          "fn": 32,
+          "threshold": 20.0,
+          "total": 1000,
+          "malicious_count": 500,
+          "benign_count": 500
+        },
+        "RULE_PLUS_ML": {
+          "accuracy": 0.773,
+          "precision": 0.7468354430379747,
+          "recall": 0.826,
+          "f1": 0.7844254510921178,
+          "pr_auc": 0.8768662450480835,
+          "roc_auc": 0.8622639999999999,
+          "fpr": 0.28,
+          "fnr": 0.174,
+          "tp": 413,
+          "tn": 360,
+          "fp": 140,
+          "fn": 87,
+          "threshold": 30.0,
+          "total": 1000,
+          "malicious_count": 500,
+          "benign_count": 500
+        },
+        "FULL_SCAMSHIELD": {
+          "accuracy": 0.773,
+          "precision": 0.7468354430379747,
+          "recall": 0.826,
+          "f1": 0.7844254510921178,
+          "pr_auc": 0.8768662450480835,
+          "roc_auc": 0.8622639999999999,
+          "fpr": 0.28,
+          "fnr": 0.174,
+          "tp": 413,
+          "tn": 360,
+          "fp": 140,
+          "fn": 87,
+          "threshold": 30.0,
+          "total": 1000,
+          "malicious_count": 500,
+          "benign_count": 500
+        }
+      }
+    ]
+  ],
+  "metadata": {
+    "evaluation_timestamp": "2026-10-07T21:12:36.370519+00:00",
+    "python": "3.11.9",
+    "packages": {
+      "numpy": "2.4.0",
+      "scikit-learn": "1.9.0",
+      "shap": "0.47.2",
+      "scipy": "1.17.1"
+    },
+    "dataset_csv_sha256": "d68b3cd0648dcf9c775347416ad1a8995e8a025921fbe3871ca6158d4db3c3a1",
+    "model_artifact_sha256": "fda0c7b574ab944e58af3446d8bd806c4e0ae4516c8610373588df454acd7885",
+    "model_artifact": "artifacts\\scamshield_domain_grouped_baseline.pkl",
+    "thresholds": {
+      "ml": 20.0,
+      "fusion_suspicious": 30.0,
+      "fusion_dangerous": 70
+    },
+    "split": {
+      "strategy": "domain_grouped",
+      "seed": 42,
+      "train": 69960,
+      "validation": 23320,
+      "test": 23319
+    },
+    "external_signals": "not queried; unavailable by evaluation safety constraint"
+  }
+}

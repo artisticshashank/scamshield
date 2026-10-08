@@ -1,0 +1,104 @@
+{
+  "benign_count": 500,
+  "bytes": 104074,
+  "category_distribution": {
+    "<missing>": 1000
+  },
+  "columns": [
+    "URL",
+    "Using the IP Address",
+    "Long URL",
+    "URL Shortening Services",
+    "URL having @ Symbol",
+    "Redirecting using //",
+    "Prefix/Suffix with - in Domain",
+    "Sub Domain and Multi Sub Domains",
+    "HTTPS",
+    "Domain Registration Length",
+    "Favicon",
+    "HTTPS Token in Domain",
+    "Request URL",
+    "URL of Anchor",
+    "Links in Meta/Script/Link Tags",
+    "Server Form Handler (SFH)",
+    "Submitting to Email",
+    "Abnormal URL",
+    "Website Forwarding",
+    "Status Bar Customization",
+    "Using Pop-up Window",
+    "Age of Domain",
+    "DNS Record",
+    "Website Traffic",
+    "PageRank",
+    "Google Index",
+    "Number of Links Pointing to Page",
+    "Statistical-Reports Based Feature",
+    "Results"
+  ],
+  "conflicting_normalized_urls": 0,
+  "date_fields": {
+    "count": 0,
+    "max": null,
+    "min": null,
+    "unique": 0
+  },
+  "exact_duplicate_rows": 2,
+  "filename": "Phishing Detection External Evaluation Dataset (1000 URLs).csv",
+  "invalid_labels": 0,
+  "label_field": "Results",
+  "label_mapping": {
+    "0": 0,
+    "1": 1,
+    "benign": 0,
+    "legitimate": 0,
+    "malicious": 1,
+    "phishing": 1
+  },
+  "label_values": {
+    "0": 500,
+    "1": 500
+  },
+  "malformed_urls": 0,
+  "malicious_count": 500,
+  "missing_urls": 0,
+  "normalized_duplicate_rows": 6,
+  "overlap": {
+    "exact_base": 0,
+    "exact_other": 0,
+    "hosts_base": 37,
+    "hosts_other": 41,
+    "normalized_base": 5,
+    "normalized_other": 41,
+    "partition_hosts": {
+      "test": 0,
+      "train": 0,
+      "validation": 0
+    },
+    "partition_normalized": {
+      "test": 0,
+      "train": 5,
+      "validation": 0
+    },
+    "registered_domains_base": 142
+  },
+  "path": "data\\challenge_sources\\Phishing Detection External Evaluation Dataset (1000 URLs).csv",
+  "provenance": {
+    "doi": "10.17632/2ctjcnm9kn.2",
+    "label_semantics": "Results 1=phishing, 0=legitimate",
+    "notes": "Identity/provenance is documented externally; raw CSV contains feature columns but no per-row feed identifiers.",
+    "publication_date": "2025-10-27",
+    "publisher": "Mendeley Data / PhishBench-External",
+    "reported_collection_period": "July 2025",
+    "reported_sources": "PhishTank for phishing URLs; Tranco for legitimate URLs"
+  },
+  "provenance_fields": [],
+  "row_count": 1000,
+  "sha256": "df25f4cae492c91cdca83887737a3d1672df71ebe8b581eeac21715a704b869f",
+  "source_distribution": {
+    "<missing>": 1000
+  },
+  "source_name": "PhishBench-External D4v v2",
+  "unique_hosts": 901,
+  "unique_registered_domains": 762,
+  "url_field": "URL"
+}

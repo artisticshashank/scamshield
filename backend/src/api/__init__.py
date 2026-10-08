@@ -1,0 +1,1 @@
+"""ScamShield REST API package."""
