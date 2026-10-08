@@ -1,2 +1,17 @@
+[project]
+name = "scamshield-api"
+version = "0.1.0"
+requires-python = ">=3.11"
+dependencies = [
+    "scikit-learn>=1.9,<2",
+    "pytest>=9,<10",
+    "shap>=0.46,<0.48",
+    "dnspython>=2.8,<3",
+    "fastapi>=0.115,<1",
+    "uvicorn>=0.30,<1",
+    "httpx>=0.27,<1",
+    "PyJWT>=2.10,<3",
+]
+
 [tool.vercel]
 entrypoint = "src.api.app:app"
