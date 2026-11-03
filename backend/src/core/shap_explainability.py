@@ -22,6 +22,7 @@ class SHAPFeature:
     direction: str
     contribution: float
     explanation: str
+    plain_language: str
 
     def to_dict(self) -> dict[str, object]:
         return asdict(self)
@@ -39,6 +40,7 @@ class SHAPResult:
     prediction_value: float
     expected_value: float
     top_features: list[SHAPFeature]
+    plain_language_summary: str
     metadata: dict[str, object]
 
     def to_dict(self) -> dict[str, object]:
@@ -92,6 +94,7 @@ def explain_url(
         prediction_value=prediction_value,
         expected_value=base_value,
         top_features=selected,
+        plain_language_summary=_plain_language_summary(selected),
         metadata={
             "output_space": "log_odds",
             "shap_version": str(getattr(shap, "__version__", "unknown")),
@@ -101,6 +104,7 @@ def explain_url(
             "shap_value_sum": float(shap_values.sum()),
             "model_prediction": int(model.predict_one(normalized).predicted_class),
             "probability_is_calibrated": False,
+            "baseline_note": "The zero-vector baseline represents an input with no active URL text features; SHAP values explain movement from this baseline, not a calibrated risk percentage.",
         },
     )
 
@@ -174,6 +178,7 @@ def _build_features(
                     f"Character n-gram {name!r} pushes the model toward "
                     f"{direction} by {contribution:+.6f} log-odds."
                 ),
+                plain_language=_plain_language(str(name), direction),
             )
         )
     return result
@@ -199,3 +204,40 @@ def _select_features(
         key=lambda feature: abs(feature.shap_value),
         reverse=True,
     )[:overall]
+
+
+def _plain_language(feature: str, direction: str) -> str:
+    """Translate model text fragments without presenting them as proof."""
+    token = feature.lower().strip()
+    patterns = (
+        (("login", "signin", "sign-in", "log-in"), "login wording"),
+        (("verify", "verification", "confirm"), "verification or confirmation wording"),
+        (("password", "passwd", "credential"), "password or account-access wording"),
+        (("payment", "billing", "invoice", "wallet"), "payment or billing wording"),
+        (("account", "profile", "member"), "account-related wording"),
+        (("secure", "security", "auth"), "security or authentication wording"),
+        (("bank", "card", "upi"), "banking or payment-related wording"),
+        (("urgent", "alert", "suspend", "locked"), "urgent or account-warning wording"),
+        (("http", "www", ".com", ".org", ".net"), "a common web-address pattern"),
+    )
+    matched = next((label for needles, label in patterns if any(n in token for n in needles)), None)
+    if direction == "phishing":
+        if matched:
+            return f"This fragment contains {matched}, which nudged the model toward its phishing-like class. Legitimate sites can use the same wording, so this is a clue—not proof."
+        return "This small address fragment nudged the model toward its phishing-like class. It is not meaningful evidence on its own."
+    if matched:
+        return f"This fragment contains {matched}, which nudged the model toward its benign-like class. It does not certify that the website is safe."
+    return "This small address fragment nudged the model toward its benign-like class. It does not certify that the website is safe."
+
+
+def _plain_language_summary(features: list[SHAPFeature]) -> str:
+    positive = [item for item in features if item.shap_value > 0]
+    negative = [item for item in features if item.shap_value < 0]
+    if not features:
+        return "The model produced no non-zero text-fragment explanations for this URL."
+    parts = []
+    if positive:
+        parts.append(f"{len(positive)} highlighted fragment(s) pushed the model toward phishing-like patterns")
+    if negative:
+        parts.append(f"{len(negative)} pushed it toward benign-like patterns")
+    return "; ".join(parts) + ". These are influences on the ML model, not a final verdict or proof of fraud."
