@@ -178,7 +178,7 @@ export default function ForensicsPage() {
                 SHAP measures how small text patterns in this URL moved the machine-learning model toward or away from its phishing-like class. It explains the ML model; it does not set the final risk score.
               </p>
             </div>
-            <span className={\`rounded-full px-3 py-1 text-xs font-semibold \${shapSignal?.status === "available" ? "bg-emerald-50 text-emerald-700" : "bg-amber-50 text-amber-800"}\`}>
+            <span className={`rounded-full px-3 py-1 text-xs font-semibold ${shapSignal?.status === "available" ? "bg-emerald-50 text-emerald-700" : "bg-amber-50 text-amber-800"}`}>
               SHAP: {shapSignal?.status ?? "not available"}
             </span>
           </div>
@@ -205,10 +205,10 @@ export default function ForensicsPage() {
                 {shapFeatures.map((feature, index) => {
                   const towardPhishing = feature.direction === "phishing";
                   return (
-                    <article key={\`\${String(feature.feature)}-\${index}\`} className="rounded-xl border border-slate-200 p-4">
+                    <article key={`${String(feature.feature)}-${index}`} className="rounded-xl border border-slate-200 p-4">
                       <div className="flex flex-wrap items-center justify-between gap-2">
                         <code className="rounded bg-slate-100 px-2 py-1 text-sm font-semibold text-slate-900">{String(feature.feature)}</code>
-                        <span className={\`\${towardPhishing ? "text-rose-700" : "text-emerald-700"} text-xs font-semibold\`}>
+                        <span className={`${towardPhishing ? "text-rose-700" : "text-emerald-700"} text-xs font-semibold`}>
                           {towardPhishing ? "↑ Nudged toward phishing" : "↓ Nudged toward benign"}
                         </span>
                       </div>
