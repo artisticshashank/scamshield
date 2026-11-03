@@ -1,4 +1,4 @@
-"""Generate one printable QR sample per reference verdict category.
+"""Generate one printable QR code per demo corpus case.
 
 Run from the backend directory:
     python scripts/generate_demo_qr.py
@@ -40,7 +40,7 @@ def main() -> None:
             image.save(destination)
             generated.append(destination)
     for path in generated:
-        print(f"Generated {path.relative_to(ROOT)}")
+        print(f"Generated {path.relative_to(ROOT.parent)}")
 
 
 if __name__ == "__main__":
