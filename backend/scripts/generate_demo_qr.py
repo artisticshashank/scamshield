@@ -16,13 +16,14 @@ from qrcode.image.svg import SvgPathImage
 
 ROOT = Path(__file__).resolve().parents[1]
 CORPUS = ROOT / "data" / "demo_test_corpus.json"
-OUTPUT = ROOT / "data" / "qr"
+OUTPUTS = (ROOT / "data" / "qr", ROOT.parent / "frontend" / "public" / "demo-qr")
 
 
 def main() -> None:
     corpus = json.loads(CORPUS.read_text(encoding="utf-8"))
-    OUTPUT.mkdir(parents=True, exist_ok=True)
     generated = []
+    for output_dir in OUTPUTS:
+        output_dir.mkdir(parents=True, exist_ok=True)
     for category in ("genuine", "suspicious", "dangerous"):
         sample = next(
             item for item in corpus["samples"]
@@ -37,9 +38,10 @@ def main() -> None:
         qr.add_data(sample["qr_payload"])
         qr.make(fit=True)
         image = qr.make_image(image_factory=SvgPathImage)
-        destination = OUTPUT / f"{category}.svg"
-        image.save(destination)
-        generated.append(destination)
+        for output_dir in OUTPUTS:
+            destination = output_dir / f"{category}.svg"
+            image.save(destination)
+            generated.append(destination)
     for path in generated:
         print(f"Generated {path.relative_to(ROOT)}")
 
