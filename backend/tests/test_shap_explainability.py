@@ -28,6 +28,8 @@ def test_explanation_uses_actual_binary_model_prediction() -> None:
     assert result.explainer_type == "shap.LinearExplainer"
     assert result.explained_class == "phishing"
     assert result.top_features
+    assert result.plain_language_summary
+    assert all(feature.plain_language for feature in result.top_features)
     assert result.metadata["model_prediction"] == model.predict_one(
         "http://secure-login.invalid/verify"
     ).predicted_class
