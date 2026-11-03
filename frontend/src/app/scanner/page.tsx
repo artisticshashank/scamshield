@@ -191,7 +191,7 @@ export default function ScannerPage() {
               <div className="flex items-center justify-between mb-6">
                 <div className="flex gap-2 bg-gray-50 p-1.5 rounded-lg border border-gray-200">
                   <button 
-                    onClick={() => setInputMode("url")}
+                    onClick={() => { setInputMode("url"); setSelectedDemo(null); }}
                     className={`px-4 py-2 rounded-md text-xs uppercase tracking-wider font-bold flex items-center gap-2 transition-all ${
                       inputMode === "url" ? "bg-white text-gray-900 shadow-sm border border-gray-200/50" : "text-gray-500 hover:text-gray-700"
                     }`}
@@ -200,7 +200,7 @@ export default function ScannerPage() {
                     URL / Domain
                   </button>
                   <button 
-                    onClick={() => setInputMode("message")}
+                    onClick={() => { setInputMode("message"); setSelectedDemo(null); }}
                     className={`px-4 py-2 rounded-md text-xs uppercase tracking-wider font-bold flex items-center gap-2 transition-all ${
                       inputMode === "message" ? "bg-white text-gray-900 shadow-sm border border-gray-200/50" : "text-gray-500 hover:text-gray-700"
                     }`}
@@ -232,12 +232,12 @@ export default function ScannerPage() {
                       />
                     </div>
                     <button 
-                      onClick={() => demoMode && selectedDemo ? handleDemoScan(selectedDemo.id, selectedDemo.mode) : void handleScan()}
+                      onClick={() => demoMode && selectedDemo?.mode === inputMode ? handleDemoScan(selectedDemo.id, inputMode) : void handleScan()}
                       disabled={!inputValue.trim()}
                       className="bg-[#0F172A] text-white px-8 h-full rounded-lg font-bold flex items-center gap-2 hover:bg-gray-800 transition-colors disabled:opacity-50 disabled:cursor-not-allowed shadow-sm"
                     >
                       <Scan className="w-5 h-5" />
-                      Deep Scan
+                      {demoMode && selectedDemo?.mode === "url" ? "Show Demo Result" : "Deep Scan"}
                     </button>
                   </div>
                 ) : (
@@ -255,7 +255,7 @@ export default function ScannerPage() {
                       className="bg-[#0F172A] text-white h-14 rounded-lg font-bold flex items-center justify-center gap-2 hover:bg-gray-800 transition-colors disabled:opacity-50 disabled:cursor-not-allowed shadow-sm w-full"
                     >
                       <Scan className="w-5 h-5" />
-                      Extract & Deep Scan
+                      {demoMode && selectedDemo?.mode === "message" ? "Show Demo Result" : "Extract & Deep Scan"}
                     </button>
                   </div>
                 )}
