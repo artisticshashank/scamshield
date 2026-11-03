@@ -189,11 +189,11 @@ export default function ForensicsPage() {
               </p>
               <div className="mt-4 grid gap-3 sm:grid-cols-3">
                 <div className="rounded-lg border border-slate-200 p-3">
-                  <p className="text-xs text-slate-500">Model baseline</p>
+                  <p className="text-xs text-slate-500">Starting point (no URL text)</p>
                   <p className="mt-1 font-mono text-lg font-semibold">{typeof shapPayload.base_value === "number" ? shapPayload.base_value.toFixed(3) : "—"}</p>
                 </div>
                 <div className="rounded-lg border border-slate-200 p-3">
-                  <p className="text-xs text-slate-500">Prediction (log-odds)</p>
+                  <p className="text-xs text-slate-500">Model output (log-odds)</p>
                   <p className="mt-1 font-mono text-lg font-semibold">{typeof shapPayload.prediction_value === "number" ? shapPayload.prediction_value.toFixed(3) : "—"}</p>
                 </div>
                 <div className="rounded-lg border border-slate-200 p-3">
@@ -201,6 +201,9 @@ export default function ForensicsPage() {
                   <p className="mt-1 font-mono text-lg font-semibold">{shapFeatures.length}</p>
                 </div>
               </div>
+              <p className="mt-3 text-xs leading-5 text-slate-500">
+                The starting point is the model output before URL text features are added. Each row shows how one fragment moved the output from that starting point.
+              </p>
               <div className="mt-5 space-y-3">
                 {shapFeatures.map((feature, index) => {
                   const towardPhishing = feature.direction === "phishing";
