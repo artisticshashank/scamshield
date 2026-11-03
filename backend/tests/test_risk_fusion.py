@@ -131,10 +131,24 @@ def test_no_available_signals_is_safe_with_explicit_empty_breakdown() -> None:
 
 @pytest.mark.parametrize(
     ("score", "verdict"),
-    [(0, "safe"), (29, "safe"), (30, "suspicious"), (69, "suspicious"), (70, "dangerous"), (100, "dangerous")],
+    [(0, "safe"), (29, "safe"), (30, "suspicious"), (49, "suspicious"), (50, "dangerous"), (69, "dangerous"), (70, "dangerous"), (100, "dangerous")],
 )
 def test_verdict_boundaries(score: float, verdict: str) -> None:
     assert classify_risk(score)[0] == verdict
+
+
+def test_reserved_invalid_domain_forces_dangerous_verdict() -> None:
+    from core.feature_extraction import extract_features
+    from core.normalization import normalize_url
+    from core.rule_engine import evaluate_rules
+
+    normalized = normalize_url("http://parcel-customs-release.invalid/pay/urgent-fee")
+    evidence_items = evaluate_rules(normalized, extract_features(normalized))
+    result = fuse_signals(rule_evidence=evidence_items, ml_result=ml_result(0.05))
+
+    assert "URL_RESERVED_INVALID_TLD" in {item.rule_id for item in evidence_items}
+    assert result.risk_score == 100.0
+    assert result.verdict == "dangerous"
 
 
 def test_recommendations_are_deterministic() -> None:
