@@ -76,6 +76,13 @@ export default function ForensicsPage() {
   const breakdown = displayed.score_breakdown;
   const rules = displayed.evidence ?? displayed.triggered_rules ?? [];
   const original = message?.original_message ?? displayed.original_input;
+  const shapSignal = displayed.shap_result;
+  const shapPayload = shapSignal && typeof shapSignal.value === "object" && shapSignal.value !== null
+    ? shapSignal.value as Record<string, unknown>
+    : null;
+  const shapFeatures = Array.isArray(shapPayload?.top_features)
+    ? shapPayload.top_features.filter((item): item is Record<string, unknown> => typeof item === "object" && item !== null)
+    : [];
 
   return (
     <div className="max-w-[1200px] mx-auto space-y-8 pb-20">
@@ -161,6 +168,70 @@ export default function ForensicsPage() {
             </p>
           )}
         </div>
+
+        <section className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
+          <div className="flex flex-wrap items-start justify-between gap-3">
+            <div>
+              <p className="text-xs font-bold uppercase tracking-widest text-slate-500">Explainable AI · SHAP</p>
+              <h2 className="mt-1 text-xl font-bold text-slate-950">Why did the ML model lean this way?</h2>
+              <p className="mt-2 max-w-3xl text-sm leading-6 text-slate-600">
+                SHAP measures how small text patterns in this URL moved the machine-learning model toward or away from its phishing-like class. It explains the ML model; it does not set the final risk score.
+              </p>
+            </div>
+            <span className={\`rounded-full px-3 py-1 text-xs font-semibold \${shapSignal?.status === "available" ? "bg-emerald-50 text-emerald-700" : "bg-amber-50 text-amber-800"}\`}>
+              SHAP: {shapSignal?.status ?? "not available"}
+            </span>
+          </div>
+          {shapPayload ? (
+            <>
+              <p className="mt-5 rounded-lg bg-slate-50 p-4 text-sm leading-6 text-slate-800">
+                {String(shapPayload.plain_language_summary ?? "The model returned feature-level explanations.")}
+              </p>
+              <div className="mt-4 grid gap-3 sm:grid-cols-3">
+                <div className="rounded-lg border border-slate-200 p-3">
+                  <p className="text-xs text-slate-500">Model baseline</p>
+                  <p className="mt-1 font-mono text-lg font-semibold">{typeof shapPayload.base_value === "number" ? shapPayload.base_value.toFixed(3) : "—"}</p>
+                </div>
+                <div className="rounded-lg border border-slate-200 p-3">
+                  <p className="text-xs text-slate-500">Prediction (log-odds)</p>
+                  <p className="mt-1 font-mono text-lg font-semibold">{typeof shapPayload.prediction_value === "number" ? shapPayload.prediction_value.toFixed(3) : "—"}</p>
+                </div>
+                <div className="rounded-lg border border-slate-200 p-3">
+                  <p className="text-xs text-slate-500">Highlighted fragments</p>
+                  <p className="mt-1 font-mono text-lg font-semibold">{shapFeatures.length}</p>
+                </div>
+              </div>
+              <div className="mt-5 space-y-3">
+                {shapFeatures.map((feature, index) => {
+                  const towardPhishing = feature.direction === "phishing";
+                  return (
+                    <article key={\`\${String(feature.feature)}-\${index}\`} className="rounded-xl border border-slate-200 p-4">
+                      <div className="flex flex-wrap items-center justify-between gap-2">
+                        <code className="rounded bg-slate-100 px-2 py-1 text-sm font-semibold text-slate-900">{String(feature.feature)}</code>
+                        <span className={\`\${towardPhishing ? "text-rose-700" : "text-emerald-700"} text-xs font-semibold\`}>
+                          {towardPhishing ? "↑ Nudged toward phishing" : "↓ Nudged toward benign"}
+                        </span>
+                      </div>
+                      <p className="mt-2 text-sm leading-6 text-slate-700">{String(feature.plain_language ?? feature.explanation ?? "This text fragment influenced the model.")}</p>
+                      <p className="mt-2 font-mono text-xs text-slate-500">SHAP contribution: {typeof feature.shap_value === "number" ? feature.shap_value.toFixed(5) : "—"} log-odds</p>
+                    </article>
+                  );
+                })}
+              </div>
+              <details className="mt-5 rounded-lg border border-slate-200 p-4">
+                <summary className="cursor-pointer text-sm font-semibold text-slate-700">Technical details</summary>
+                <pre className="mt-3 overflow-auto rounded-lg bg-slate-950 p-4 text-xs text-slate-100">{JSON.stringify({ explainer_type: shapPayload.explainer_type, model_name: shapPayload.model_name, model_version: shapPayload.model_version, metadata: shapPayload.metadata }, null, 2)}</pre>
+              </details>
+            </>
+          ) : (
+            <p className="mt-4 rounded-lg bg-amber-50 p-4 text-sm leading-6 text-amber-900">
+              {String(shapSignal?.error ?? "SHAP is not available for this scan. The rule-based and other available signals are still shown above.")}
+            </p>
+          )}
+          <p className="mt-4 text-xs leading-5 text-slate-500">
+            Important: character fragments are statistical clues, not standalone proof. SHAP values are in model log-odds space—not percentages or the final 0–100 ScamShield risk score. A low-risk result is not a guarantee of safety.
+          </p>
+        </section>
 
         <div>
           <h2 className="text-lg font-bold text-gray-900 border-b border-gray-200 pb-2 mb-4">
