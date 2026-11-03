@@ -146,17 +146,17 @@ export default function ScannerPage() {
             Preview State:
           </div>
           <div className="flex items-center gap-1 text-gray-500 font-semibold text-sm">
-            <span className={`px-4 py-1.5 rounded-lg transition-colors cursor-pointer ${scanState === 'form' ? 'bg-white text-gray-900 font-bold shadow-sm border border-gray-200/50' : 'hover:bg-gray-200'}`} onClick={() => setScanState('form')}>Scanner Form</span>
-            <span className={`px-4 py-1.5 rounded-lg transition-colors cursor-pointer ${scanState === 'scanning' ? 'bg-white text-gray-900 font-bold shadow-sm border border-gray-200/50' : 'hover:bg-gray-200'}`} onClick={() => setScanState('scanning')}>Scanning...</span>
-            <span className={`px-4 py-1.5 rounded-lg transition-colors cursor-pointer ${scanState === 'results' ? 'bg-white text-gray-900 font-bold shadow-sm border border-gray-200/50' : 'hover:bg-gray-200'}`} onClick={() => setScanState('results')}>Results Matrix</span>
+            <span className={`px-4 py-1.5 rounded-lg transition-colors ${scanState === 'form' ? 'bg-white text-gray-900 font-bold shadow-sm border border-gray-200/50' : 'hover:bg-gray-200'}`} >Scanner Form</span>
+            <span className={`px-4 py-1.5 rounded-lg transition-colors ${scanState === 'scanning' ? 'bg-white text-gray-900 font-bold shadow-sm border border-gray-200/50' : 'hover:bg-gray-200'}`} >Scanning...</span>
+            <span className={`px-4 py-1.5 rounded-lg transition-colors ${scanState === 'results' ? 'bg-white text-gray-900 font-bold shadow-sm border border-gray-200/50' : 'hover:bg-gray-200'}`} >Results Matrix</span>
           </div>
         </div>
         <div className="flex items-center gap-2 font-mono text-[10px] font-bold uppercase tracking-wider">
           <span className="text-gray-500 mr-1">VERDICT:</span>
-          <span className="text-red-700 bg-red-100/80 border border-red-200 px-2.5 py-1 rounded">91 DANGEROUS</span>
-          <span className="text-blue-700 bg-blue-100/80 border border-blue-200 px-2.5 py-1 rounded">58 SUSPICIOUS</span>
-          <span className="text-gray-700 bg-white border border-gray-200 px-2.5 py-1 rounded">06 SAFE</span>
-          <span className="bg-[#0F172A] text-white px-2.5 py-1 rounded shadow-sm border border-gray-900 ml-1">SMS BATCH (3 URLs)</span>
+          <span className="text-red-700 bg-red-100/80 border border-red-200 px-2.5 py-1 rounded">{demoSamples.filter((sample) => sample.category === "DANGEROUS").length} DANGEROUS</span>
+          <span className="text-blue-700 bg-blue-100/80 border border-blue-200 px-2.5 py-1 rounded">{demoSamples.filter((sample) => sample.category === "SUSPICIOUS").length} SUSPICIOUS</span>
+          <span className="text-gray-700 bg-white border border-gray-200 px-2.5 py-1 rounded">{demoSamples.filter((sample) => sample.category === "SAFE").length} SAFE</span>
+          <span className="bg-[#0F172A] text-white px-2.5 py-1 rounded shadow-sm border border-gray-900 ml-1">{demoSamples.length} DEMO FIXTURES</span>
         </div>
       </div>
 
@@ -177,8 +177,9 @@ export default function ScannerPage() {
       <div className="grid grid-cols-12 gap-6 items-start">
         
         {/* Left Col (Form) */}
-        <div className="col-span-8">
-          <div className="bg-white rounded-2xl border border-gray-200 shadow-sm relative overflow-hidden">
+        <div className="col-span-12 lg:col-span-8">
+          <div className="bg-white rounded-2xl border border-gray-200 shadow-sm">
+            <div className="relative overflow-hidden">
             {scanState === 'scanning' && (
                <div className="absolute inset-0 bg-white/90 backdrop-blur-sm z-10 flex flex-col items-center justify-center">
                   <div className="w-10 h-10 border-4 border-gray-200 border-t-[#0F172A] rounded-full animate-spin mb-4"></div>
@@ -245,13 +246,13 @@ export default function ScannerPage() {
                     <textarea 
                       rows={5}
                       value={inputValue}
-                      onChange={(e) => setInputValue(e.target.value)}
+                      onChange={(e) => { setInputValue(e.target.value); setSelectedDemo(null); }}
                       placeholder="Paste full SMS or email body here..."
                       className="w-full bg-gray-50/50 border border-gray-300 rounded-lg p-4 font-mono text-sm text-gray-900 focus:outline-none focus:border-gray-500 focus:ring-2 focus:ring-gray-100 transition-all shadow-inner resize-none placeholder:text-gray-400 font-medium"
                     ></textarea>
                     <button 
-                      onClick={() => void handleScan()}
-                      disabled={!inputValue.trim()}
+                      onClick={() => demoMode && selectedDemo?.mode === "message" ? handleDemoScan(selectedDemo.id, "message") : void handleScan()}
+                      disabled={!inputValue.trim() || scanState === "scanning"}
                       className="bg-[#0F172A] text-white h-14 rounded-lg font-bold flex items-center justify-center gap-2 hover:bg-gray-800 transition-colors disabled:opacity-50 disabled:cursor-not-allowed shadow-sm w-full"
                     >
                       <Scan className="w-5 h-5" />
@@ -271,6 +272,7 @@ export default function ScannerPage() {
               </div>
             </div>
 
+            </div>
             <div className="bg-gray-50/80 border-t border-gray-200 p-6 pb-8">
               <div className="flex flex-wrap items-center justify-between gap-3 mb-5">
                 <div>
@@ -361,7 +363,7 @@ export default function ScannerPage() {
         </div>
 
         {/* Right Col */}
-        <div className="col-span-4 space-y-6">
+        <div className="col-span-12 lg:col-span-4 space-y-6">
           {/* QR Upload */}
           <div className="bg-white rounded-2xl p-6 border border-gray-200 shadow-sm h-[320px] flex flex-col">
             <div className="flex items-center justify-between mb-4">
@@ -392,7 +394,7 @@ export default function ScannerPage() {
             >
               <UploadCloud className="w-6 h-6 text-gray-400 mb-3 group-hover:text-gray-600 transition-colors" />
               <p className="text-sm font-bold text-gray-700">Drop image or browse</p>
-              <p className="text-[10px] font-mono text-gray-400 mt-2 font-bold tracking-widest uppercase">PNG, JPG, HEIC up to 10MB</p>
+              <p className="text-[10px] font-mono text-gray-400 mt-2 font-bold tracking-widest uppercase">PNG, JPG, WEBP up to 10MB</p>
             </button>
           </div>
 
