@@ -14,12 +14,12 @@ python -m pip install -r requirements.txt
 python scripts/generate_demo_qr.py
 ```
 
-This writes printable SVG QR codes to:
+This writes 12 printable SVG QR codes (one per corpus case) to:
 
 - `backend/data/qr/`
 - `frontend/public/demo-qr/`
 
-The frontend can then display and upload the three QR examples. QR images encode
+The frontend can then display and upload the matching QR example for each category. Each of the 12 records has its own QR asset. QR images encode
 only the URL in the matching corpus case; they do not open or visit that URL.
 
 ## Safety and interpretation
