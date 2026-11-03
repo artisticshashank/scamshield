@@ -58,8 +58,10 @@ function SignalCard({
         <span className="text-xs font-mono text-gray-600">{status}</span>
       </div>
       <div className="text-2xl font-bold text-gray-900">
-        {typeof signalScore === "number" ? score(signalScore) : "—"}
-      </div>
+       {status === "available" && typeof signalScore === "number"
+       ? score(signalScore)
+       : "—"}
+    </div>
     </div>
   );
 }

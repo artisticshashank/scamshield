@@ -159,26 +159,56 @@ def _build_features(
     return result
 
 
+
+
 def _select_features(
     features: list[SHAPFeature],
     top_positive: int,
     top_negative: int,
     overall: int,
 ) -> list[SHAPFeature]:
+    """Select important contributions from both directions within limits."""
+
     positives = sorted(
-        (feature for feature in features if feature.shap_value > 0),
-        key=lambda feature: feature.shap_value,
+        (f for f in features if f.shap_value > 0),
+        key=lambda f: f.shap_value,
         reverse=True,
     )[:top_positive]
+
     negatives = sorted(
-        (feature for feature in features if feature.shap_value < 0),
-        key=lambda feature: feature.shap_value,
-    )[:top_negative]
-    return sorted(
-        positives + negatives,
-        key=lambda feature: abs(feature.shap_value),
+        (f for f in features if f.shap_value < 0),
+        key=lambda f: abs(f.shap_value),
         reverse=True,
-    )[:overall]
+    )[:top_negative]
+
+    if overall <= 0:
+        return []
+
+    selected = []
+
+    # Reserve one slot for each direction when possible.
+    if overall >= 2 and positives and negatives:
+        selected.extend([positives[0], negatives[0]])
+
+    # Fill remaining slots using the strongest remaining contributions.
+    remaining = [
+        f for f in positives + negatives
+        if f not in selected
+    ]
+
+    remaining.sort(
+        key=lambda f: abs(f.shap_value),
+        reverse=True,
+    )
+
+    selected.extend(remaining[:overall - len(selected)])
+
+    return sorted(
+        selected,
+        key=lambda f: abs(f.shap_value),
+        reverse=True,
+    )
+
 
 
 def _plain_language(feature: str, direction: str) -> str:
