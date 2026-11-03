@@ -21,6 +21,7 @@ from .message_scanning import (
     select_highest_result,
 )
 from .ml_classifier import URLClassifier
+from .shap_explainability import explain_url
 from .reputation import ReputationAggregate, ReputationProvider, ReputationStatus
 from .redirect_analysis import RedirectResolver, RedirectResult
 from .risk_fusion import (
@@ -104,7 +105,7 @@ class ScanService:
                 "normalization": "available",
                 "rules": "available",
                 "ml": self.classifier_service.status.value,
-                "shap": "unavailable",
+                "shap": "configured" if self.classifier_service.classifier is not None else "not_configured",
                 "reputation": "available" if self.reputation_providers else "not_configured",
                 "domain_intelligence": "available",
                 "redirect_analysis": "available",
@@ -121,9 +122,11 @@ class ScanService:
         reputation = self._reputation_signal(normalized.normalized_url)
         domain = self._domain_signal(normalized)
         redirect = self._redirect_signal(normalized.normalized_url)
+        shap_signal = self._shap_signal(normalized)
         return build_scan_result(
             value,
             classifier=self.classifier_service.classifier,
+            shap_result=shap_signal,
             reputation=reputation,
             domain_intelligence=domain,
             redirect=redirect,
@@ -163,6 +166,24 @@ class ScanService:
                 "url_count": len(urls),
             },
         )
+
+    def _shap_signal(self, normalized: object) -> SignalResult:
+        """Explain the loaded classifier prediction without changing risk fusion."""
+        classifier = self.classifier_service.classifier
+        if classifier is None:
+            return SignalResult(
+                SignalStatus.UNAVAILABLE,
+                error="SHAP requires the URL classification model to be loaded.",
+            )
+        try:
+            explanation = explain_url(classifier, normalized, max_features=8)
+            return SignalResult(SignalStatus.AVAILABLE, explanation.to_dict())
+        except Exception as exc:
+            # An explainer/runtime problem must never make URL scanning fail.
+            return SignalResult(
+                SignalStatus.FAILED,
+                error=f"SHAP explanation unavailable: {exc.__class__.__name__}",
+            )
 
     def _reputation_signal(self, url: str) -> SignalResult:
         if not self.reputation_providers:

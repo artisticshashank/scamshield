@@ -1,11 +1,13 @@
 import json
 from dataclasses import dataclass
+from types import SimpleNamespace
 
 import pytest
 from fastapi.testclient import TestClient
 
 from api import app as api_module
 from core.message_scanning import ExtractionLimits
+from core.ml_classifier import URLClassifier, URLRecord
 from core.redirect_analysis import RedirectResponse
 from core.reputation import ReputationResult, ReputationStatus
 from core.risk_fusion import SignalStatus
@@ -235,3 +237,37 @@ def test_authenticated_request_id_reuse_with_different_payload_returns_409(
         api_module.service = original_service
         api_module.store = original_store
         api_module.verify_bearer = original_verify
+
+
+
+def test_shap_is_attached_to_scan_and_does_not_change_risk_score(monkeypatch: pytest.MonkeyPatch) -> None:
+    records = [
+        URLRecord("https://docs.example.org/home", 0),
+        URLRecord("https://public.example.net/about", 0),
+        URLRecord("https://reference.example.com/guide", 0),
+        URLRecord("http://urgent-login.invalid/account/verify", 1),
+        URLRecord("http://payment-alert.invalid/card/confirm", 1),
+        URLRecord("http://secure-bank.invalid/password/reset", 1),
+    ]
+    service = make_service()
+    service.classifier_service.classifier = URLClassifier.fit(records)
+    explanation = SimpleNamespace(
+        to_dict=lambda: {
+            "explainer_type": "shap.LinearExplainer",
+            "plain_language_summary": "A URL text pattern influenced the model.",
+            "top_features": [],
+        }
+    )
+    monkeypatch.setattr("core.scan_service.explain_url", lambda *args, **kwargs: explanation)
+
+    explained = service.scan("https://docs.example.org/home", "url")
+    assert explained.shap_result.status == SignalStatus.AVAILABLE
+    assert explained.shap_result.value["explainer_type"] == "shap.LinearExplainer"
+
+    monkeypatch.setattr(
+        "core.scan_service.explain_url",
+        lambda *args, **kwargs: (_ for _ in ()).throw(RuntimeError("SHAP unavailable")),
+    )
+    without_explanation = service.scan("https://docs.example.org/home", "url")
+    assert without_explanation.shap_result.status == SignalStatus.FAILED
+    assert without_explanation.risk_score == pytest.approx(explained.risk_score)

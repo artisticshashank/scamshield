@@ -66,7 +66,7 @@ class FusionWeights:
 @dataclass(frozen=True)
 class VerdictThresholds:
     suspicious: float = 30.0
-    dangerous: float = 70.0
+    dangerous: float = 50.0
 
     def __post_init__(self) -> None:
         if not 0 <= self.suspicious < self.dangerous <= 100:
@@ -200,6 +200,13 @@ def fuse_signals(
         final_score = _clamp(
             sum(score * weight for score, weight in available.values()) / denominator
         )
+
+    # A reserved .invalid hostname cannot be a public destination.
+    has_reserved_invalid_domain = any(
+        item.rule_id == "URL_RESERVED_INVALID_TLD" for item in (rule_evidence or [])
+    )
+    if has_reserved_invalid_domain:
+        final_score = 100.0
     contributions = {
         name: _clamp(score * weight / denominator) if denominator else 0.0
         for name, (score, weight) in available.items()
@@ -241,7 +248,7 @@ def build_scan_result(
     original_input: str,
     *,
     classifier: URLClassifier | None = None,
-    shap_result: object | None = None,
+    shap_result: object | SignalResult | None = None,
     reputation: SignalResult | None = None,
     domain_intelligence: SignalResult | None = None,
     redirect: SignalResult | None = None,
@@ -281,9 +288,11 @@ def build_scan_result(
             else SignalResult(SignalStatus.UNAVAILABLE)
         ),
         shap_result=(
-            SignalResult(SignalStatus.AVAILABLE, _serialize(shap_result))
+            shap_result
+            if isinstance(shap_result, SignalResult)
+            else SignalResult(SignalStatus.AVAILABLE, _serialize(shap_result))
             if shap_result is not None
-            else SignalResult(SignalStatus.UNAVAILABLE)
+            else SignalResult(SignalStatus.UNAVAILABLE, error="SHAP explanation was not run")
         ),
         reputation_result=reputation or not_implemented_signal(),
         domain_intelligence_result=domain_intelligence or not_implemented_signal(),

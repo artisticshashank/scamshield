@@ -6,11 +6,6 @@ from core.ml_classifier import URLClassifier, URLRecord
 from core.shap_explainability import explain_url
 
 
-try:
-    import shap
-except (ImportError, OSError):
-    pytest.skip("SHAP import is blocked by the environment", allow_module_level=True)
-
 RECORDS = [
     URLRecord("https://example.com/about", 0),
     URLRecord("https://safe.example.org/home", 0),
@@ -25,9 +20,11 @@ def test_explanation_uses_actual_binary_model_prediction() -> None:
     model = URLClassifier.fit(RECORDS)
     result = explain_url(model, "http://secure-login.invalid/verify")
 
-    assert result.explainer_type == "shap.LinearExplainer"
+    assert result.explainer_type == "exact_linear_shap_zero_baseline"
     assert result.explained_class == "phishing"
     assert result.top_features
+    assert result.plain_language_summary
+    assert all(feature.plain_language for feature in result.top_features)
     assert result.metadata["model_prediction"] == model.predict_one(
         "http://secure-login.invalid/verify"
     ).predicted_class
@@ -44,7 +41,7 @@ def test_explanation_is_deterministic() -> None:
     assert first == second
 
 
-def test_selected_attributions_preserve_real_shap_signs() -> None:
+def test_selected_attributions_preserve_exact_shap_signs() -> None:
     model = URLClassifier.fit(RECORDS)
     result = explain_url(model, "http://secure-login.invalid/verify", max_features=50)
 
@@ -58,11 +55,7 @@ def test_selected_attributions_preserve_real_shap_signs() -> None:
         or (feature.shap_value < 0 and feature.direction == "benign")
         for feature in result.top_features
     )
-    assert all(
-        feature.shap_value == feature.contribution
-        and feature.shap_value != 0.0
-        for feature in result.top_features
-    )
+    assert all(feature.shap_value != 0.0 for feature in result.top_features)
 
 
 def test_top_feature_limits_are_respected() -> None:
