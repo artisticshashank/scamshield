@@ -1,0 +1,14 @@
+# This Vercel project deploys the FastAPI backend only.
+# The frontend has its own deployment and is not part of this API function.
+frontend/
+
+# Development and demo-generation files are not needed by the live API.
+backend/tests/
+backend/scripts/
+backend/data/qr/
+backend/data/demo_test_corpus.json
+backend/data/DEMO_CORPUS.md
+
+# Python-generated files
+**/__pycache__/
+**/*.py[cod]
