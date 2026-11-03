@@ -152,7 +152,7 @@ export default function ScannerPage() {
           </div>
         </div>
         <div className="flex items-center gap-2 font-mono text-[10px] font-bold uppercase tracking-wider">
-          <span className="text-gray-500 mr-1">VERDICT:</span>
+          <span className="text-gray-500 mr-1">LIBRARY:</span>
           <span className="text-red-700 bg-red-100/80 border border-red-200 px-2.5 py-1 rounded">{demoSamples.filter((sample) => sample.category === "DANGEROUS").length} DANGEROUS</span>
           <span className="text-blue-700 bg-blue-100/80 border border-blue-200 px-2.5 py-1 rounded">{demoSamples.filter((sample) => sample.category === "SUSPICIOUS").length} SUSPICIOUS</span>
           <span className="text-gray-700 bg-white border border-gray-200 px-2.5 py-1 rounded">{demoSamples.filter((sample) => sample.category === "SAFE").length} SAFE</span>
@@ -234,7 +234,7 @@ export default function ScannerPage() {
                     </div>
                     <button 
                       onClick={() => demoMode && selectedDemo?.mode === inputMode ? handleDemoScan(selectedDemo.id, inputMode) : void handleScan()}
-                      disabled={!inputValue.trim()}
+                      disabled={!inputValue.trim() || scanState === "scanning"}
                       className="bg-[#0F172A] text-white px-8 h-full rounded-lg font-bold flex items-center gap-2 hover:bg-gray-800 transition-colors disabled:opacity-50 disabled:cursor-not-allowed shadow-sm"
                     >
                       <Scan className="w-5 h-5" />
@@ -398,28 +398,29 @@ export default function ScannerPage() {
             </button>
           </div>
 
-          {/* Engine Telemetry */}
+          {/* Scanner Configuration */}
           <div className="bg-white rounded-2xl p-6 border border-gray-200 shadow-sm">
-            <h3 className="font-bold text-gray-900 mb-5">Engine Telemetry</h3>
+            <h3 className="font-bold text-gray-900 mb-5">Scanner Configuration</h3>
             <div className="grid grid-cols-2 gap-4">
-              <div className="bg-gray-50 rounded-lg p-3.5 border border-gray-200 shadow-sm">
-                <p className="text-[10px] font-bold text-gray-500 uppercase tracking-widest mb-1.5">Feed Latency</p>
-                <p className="font-mono text-[15px] font-bold text-gray-900">14ms</p>
+              <div className="bg-gray-50 rounded-lg p-3.5 border border-gray-200">
+                <p className="text-[10px] font-bold text-gray-500 uppercase tracking-widest mb-1.5">Dangerous cutoff</p>
+                <p className="font-mono text-[15px] font-bold text-gray-900">50 / 100</p>
               </div>
-              <div className="bg-gray-50 rounded-lg p-3.5 border border-gray-200 shadow-sm">
-                <p className="text-[10px] font-bold text-gray-500 uppercase tracking-widest mb-1.5">Feed Signatures</p>
-                <p className="font-mono text-[15px] font-bold text-gray-900">4.82M</p>
+              <div className="bg-gray-50 rounded-lg p-3.5 border border-gray-200">
+                <p className="text-[10px] font-bold text-gray-500 uppercase tracking-widest mb-1.5">Suspicious cutoff</p>
+                <p className="font-mono text-[15px] font-bold text-gray-900">30 / 100</p>
               </div>
-              <div className="bg-gray-50 rounded-lg p-3.5 border border-gray-200 shadow-sm">
-                <p className="text-[10px] font-bold text-gray-500 uppercase tracking-widest mb-1.5">Cert Checker</p>
-                <p className="font-mono text-[15px] font-bold text-gray-900">CRL/OCSP v3</p>
+              <div className="bg-gray-50 rounded-lg p-3.5 border border-gray-200">
+                <p className="text-[10px] font-bold text-gray-500 uppercase tracking-widest mb-1.5">Demo examples</p>
+                <p className="font-mono text-[15px] font-bold text-gray-900">{demoSamples.length} total · 10 per verdict</p>
               </div>
-              <div className="bg-gray-50 rounded-lg p-3.5 border border-gray-200 shadow-sm">
-                <p className="text-[10px] font-bold text-gray-500 uppercase tracking-widest mb-1.5">Sandbox Proxy</p>
-                <p className="font-mono text-[15px] font-bold text-gray-900 leading-tight">US-EAST <span className="text-gray-400 block text-[10px] mt-0.5 font-sans tracking-wide uppercase">(Isolated)</span></p>
+              <div className="bg-gray-50 rounded-lg p-3.5 border border-gray-200">
+                <p className="text-[10px] font-bold text-gray-500 uppercase tracking-widest mb-1.5">Input modes</p>
+                <p className="font-mono text-[15px] font-bold text-gray-900">URL · SMS · QR</p>
               </div>
             </div>
-          </div>
+            <p className="mt-4 text-xs leading-5 text-gray-500">External reputation, domain and redirect signals are shown as unavailable when providers are not configured or a lookup fails.</p>
+          </div>v>
         </div>
 
       </div>
