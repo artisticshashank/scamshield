@@ -66,7 +66,7 @@ class FusionWeights:
 @dataclass(frozen=True)
 class VerdictThresholds:
     suspicious: float = 30.0
-    dangerous: float = 70.0
+    dangerous: float = 50.0
 
     def __post_init__(self) -> None:
         if not 0 <= self.suspicious < self.dangerous <= 100:
@@ -200,6 +200,13 @@ def fuse_signals(
         final_score = _clamp(
             sum(score * weight for score, weight in available.values()) / denominator
         )
+
+    # A reserved .invalid hostname cannot be a public destination.
+    has_reserved_invalid_domain = any(
+        item.rule_id == "URL_RESERVED_INVALID_TLD" for item in (rule_evidence or [])
+    )
+    if has_reserved_invalid_domain:
+        final_score = 100.0
     contributions = {
         name: _clamp(score * weight / denominator) if denominator else 0.0
         for name, (score, weight) in available.items()
