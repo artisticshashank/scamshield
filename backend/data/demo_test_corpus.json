@@ -1,0 +1,115 @@
+{
+  "schema_version": "1.0",
+  "purpose": "Manual and regression demo corpus for URL, message and QR intake. Categories are intended test labels, not guaranteed predictions from the current model.",
+  "safety": "Suspicious and dangerous URLs use reserved .example or .invalid domains and are non-routable. Genuine examples use well-known public sites; scanning them may contact configured DNS/redirect providers.",
+  "samples": [
+    {
+      "id": "G-URL-01",
+      "reference_category": "genuine",
+      "url": "https://www.python.org/",
+      "message": "The Python documentation site is available here: https://www.python.org/",
+      "qr_payload": "https://www.python.org/",
+      "qr_asset": "backend/data/qr/genuine.svg",
+      "rationale": "Official Python project website; no urgency or credential request."
+    },
+    {
+      "id": "G-URL-02",
+      "reference_category": "genuine",
+      "url": "https://www.wikipedia.org/",
+      "message": "You can read the article on Wikipedia: https://www.wikipedia.org/",
+      "qr_payload": "https://www.wikipedia.org/",
+      "qr_asset": "backend/data/qr/genuine.svg",
+      "rationale": "Known public reference site; neutral message."
+    },
+    {
+      "id": "G-URL-03",
+      "reference_category": "genuine",
+      "url": "https://www.mozilla.org/",
+      "message": "Mozilla's official website: https://www.mozilla.org/",
+      "qr_payload": "https://www.mozilla.org/",
+      "qr_asset": "backend/data/qr/genuine.svg",
+      "rationale": "Known organization domain; neutral context."
+    },
+    {
+      "id": "G-URL-04",
+      "reference_category": "genuine",
+      "url": "https://www.github.com/",
+      "message": "Open the project repository on GitHub: https://www.github.com/",
+      "qr_payload": "https://www.github.com/",
+      "qr_asset": "backend/data/qr/genuine.svg",
+      "rationale": "Known developer platform; neutral context."
+    },
+    {
+      "id": "S-URL-01",
+      "reference_category": "suspicious",
+      "url": "https://account-verify.example/login?continue=profile",
+      "message": "A message says my profile needs checking: https://account-verify.example/login?continue=profile",
+      "qr_payload": "https://account-verify.example/login?continue=profile",
+      "qr_asset": "backend/data/qr/suspicious.svg",
+      "rationale": "Account verification language and a login path on a synthetic domain."
+    },
+    {
+      "id": "S-URL-02",
+      "reference_category": "suspicious",
+      "url": "http://delivery-status.example/track?id=48392",
+      "message": "Your parcel status may need attention: http://delivery-status.example/track?id=48392",
+      "qr_payload": "http://delivery-status.example/track?id=48392",
+      "qr_asset": "backend/data/qr/suspicious.svg",
+      "rationale": "Delivery tracking context with an unverified synthetic domain and plain HTTP."
+    },
+    {
+      "id": "S-URL-03",
+      "reference_category": "suspicious",
+      "url": "https://support-update.example/session/confirm",
+      "message": "Support asked me to review this session: https://support-update.example/session/confirm",
+      "qr_payload": "https://support-update.example/session/confirm",
+      "qr_asset": "backend/data/qr/suspicious.svg",
+      "rationale": "Support/session confirmation wording on a synthetic domain."
+    },
+    {
+      "id": "S-URL-04",
+      "reference_category": "suspicious",
+      "url": "https://billing-notice.example/invoice/view",
+      "message": "Please review this billing notice: https://billing-notice.example/invoice/view",
+      "qr_payload": "https://billing-notice.example/invoice/view",
+      "qr_asset": "backend/data/qr/suspicious.svg",
+      "rationale": "Billing and invoice wording on an unverified synthetic domain."
+    },
+    {
+      "id": "D-URL-01",
+      "reference_category": "dangerous",
+      "url": "http://secure-bank-login-verify.invalid/urgent/account/confirm",
+      "message": "URGENT: Your bank access will be suspended. Verify your password now: http://secure-bank-login-verify.invalid/urgent/account/confirm",
+      "qr_payload": "http://secure-bank-login-verify.invalid/urgent/account/confirm",
+      "qr_asset": "backend/data/qr/dangerous.svg",
+      "rationale": "Impersonation-style wording, urgency, password request, and a synthetic non-routable domain."
+    },
+    {
+      "id": "D-URL-02",
+      "reference_category": "dangerous",
+      "url": "http://upi-refund-claim.invalid/collect/upi-pin",
+      "message": "Your refund is waiting. Enter your UPI PIN to receive money: http://upi-refund-claim.invalid/collect/upi-pin",
+      "qr_payload": "http://upi-refund-claim.invalid/collect/upi-pin",
+      "qr_asset": "backend/data/qr/dangerous.svg",
+      "rationale": "Requests a UPI PIN to receive a refund; users should never share a UPI PIN."
+    },
+    {
+      "id": "D-URL-03",
+      "reference_category": "dangerous",
+      "url": "http://payroll-password-reset.invalid/employee/login",
+      "message": "Payroll account locked. Send your password to restore access: http://payroll-password-reset.invalid/employee/login",
+      "qr_payload": "http://payroll-password-reset.invalid/employee/login",
+      "qr_asset": "backend/data/qr/dangerous.svg",
+      "rationale": "Credential disclosure request and pressure to restore account access."
+    },
+    {
+      "id": "D-URL-04",
+      "reference_category": "dangerous",
+      "url": "http://parcel-fee-pay-now.invalid/customs/settle",
+      "message": "Final warning: pay this fee immediately or your parcel will be destroyed: http://parcel-fee-pay-now.invalid/customs/settle",
+      "qr_payload": "http://parcel-fee-pay-now.invalid/customs/settle",
+      "qr_asset": "backend/data/qr/dangerous.svg",
+      "rationale": "High-pressure payment demand on a synthetic non-routable domain."
+    }
+  ]
+}
