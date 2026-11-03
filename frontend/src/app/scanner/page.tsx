@@ -2,11 +2,12 @@
 
 import { useCallback, useEffect, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
-import { Search, UploadCloud, Scan, Globe, LayoutGrid, FileText, User } from "lucide-react";
+import { Search, UploadCloud, Scan, Globe, LayoutGrid, FileText, User, Copy, Check } from "lucide-react";
 import jsQR from "jsqr";
 import { API_BASE_URL, saveScan, type ScanResponse } from "@/lib/scamshield";
 import { clearPendingScan, readPendingScan, savePendingScan } from "@/lib/pending-scan";
 import { supabase } from "@/lib/supabase";
+import { buildDemoResponse, demoSamples } from "@/lib/demo-fixtures";
 
 export default function ScannerPage() {
   const router = useRouter();
@@ -15,6 +16,31 @@ export default function ScannerPage() {
   const [inputValue, setInputValue] = useState("");
   const [error, setError] = useState<string | null>(null);
   const qrFileInputRef = useRef<HTMLInputElement>(null);
+  const [demoMode, setDemoMode] = useState(false);
+  const [selectedDemo, setSelectedDemo] = useState<{ id: string; mode: "url" | "message" } | null>(null);
+  const [copiedId, setCopiedId] = useState<string | null>(null);
+
+  const handleDemoScan = (sampleId: string, mode: "url" | "message") => {
+    const sample = demoSamples.find((item) => item.id === sampleId);
+    if (!sample) {
+      setError("The selected demonstration example could not be found.");
+      return;
+    }
+    setError(null);
+    setScanState("results");
+    saveScan(buildDemoResponse(sample, mode));
+    router.push("/forensics");
+  };
+
+  const copyDemoText = async (value: string, key: string) => {
+    try {
+      await navigator.clipboard.writeText(value);
+      setCopiedId(key);
+      window.setTimeout(() => setCopiedId((current) => current === key ? null : current), 1600);
+    } catch {
+      setError("Clipboard access was blocked by the browser. Select and copy the text manually.");
+    }
+  };
 
   const handleScan = useCallback(async (value = inputValue, mode = inputMode) => {
     if (!value.trim()) return;
@@ -200,7 +226,7 @@ export default function ScannerPage() {
                       <input 
                         type="text" 
                         value={inputValue}
-                        onChange={(e) => setInputValue(e.target.value)}
+                        onChange={(e) => { setInputValue(e.target.value); setSelectedDemo(null); }}
                         placeholder="https://secure-login-chase-update.com/account/verify"
                         className="bg-transparent border-none outline-none w-full text-gray-900 font-mono text-sm placeholder:text-gray-400 font-medium"
                       />
@@ -246,63 +272,89 @@ export default function ScannerPage() {
             </div>
 
             <div className="bg-gray-50/80 border-t border-gray-200 p-6 pb-8">
-              <div className="flex flex-wrap items-center justify-between gap-2 mb-4">
+              <div className="flex flex-wrap items-center justify-between gap-3 mb-5">
                 <div>
                   <p className="text-[10px] font-bold text-gray-500 uppercase tracking-widest">DEMO TEST LIBRARY</p>
-                  <p className="mt-1 text-xs text-gray-500">Load a URL or message, or scan the matching QR image.</p>
+                  <p className="mt-1 text-xs text-gray-500">30 URL fixtures and 30 message fixtures, grouped by expected demonstration category.</p>
                 </div>
-                <span className="rounded-full bg-white border border-gray-200 px-2 py-1 text-[10px] font-mono text-gray-500">3 REFERENCE CATEGORIES</span>
+                <button
+                  type="button"
+                  aria-pressed={demoMode}
+                  onClick={() => { setDemoMode((value) => !value); setSelectedDemo(null); }}
+                  className={`rounded-lg border px-3 py-2 text-xs font-bold transition-colors ${demoMode ? "border-indigo-300 bg-indigo-50 text-indigo-800" : "border-gray-300 bg-white text-gray-700 hover:bg-gray-100"}`}
+                >
+                  Demo Mode: {demoMode ? "ON" : "OFF"}
+                </button>
               </div>
-              <div className="grid gap-3 md:grid-cols-3">
-                {[
-                  {
-                    category: "GENUINE",
-                    url: "https://www.python.org/",
-                    message: "You can read the official Python documentation here: https://www.python.org/",
-                    qr: "/demo-qr/G-URL-01.svg",
-                    tone: "border-emerald-200 bg-emerald-50 text-emerald-800",
-                    description: "Known public site · neutral context",
-                  },
-                  {
-                    category: "SUSPICIOUS",
-                    url: "https://account-verify.example/login?continue=profile",
-                    message: "A message says my profile needs checking: https://account-verify.example/login?continue=profile",
-                    qr: "/demo-qr/S-URL-01.svg",
-                    tone: "border-amber-200 bg-amber-50 text-amber-800",
-                    description: "Unverified host · account verification wording",
-                  },
-                  {
-                    category: "DANGEROUS",
-                    url: "http://secure-bank-login-verify.invalid/urgent/account/confirm",
-                    message: "URGENT: Your bank access will be suspended. Verify your password now: http://secure-bank-login-verify.invalid/urgent/account/confirm",
-                    qr: "/demo-qr/D-URL-01.svg",
-                    tone: "border-rose-200 bg-rose-50 text-rose-800",
-                    description: "Urgency · credential request · synthetic host",
-                  },
-                ].map((sample) => (
-                  <article key={sample.category} className="rounded-xl border border-gray-200 bg-white p-4">
-                    <div className="flex items-center justify-between gap-2">
-                      <span className={`rounded-full border px-2 py-1 text-[10px] font-bold tracking-wider ${sample.tone}`}>{sample.category}</span>
-                      <span className="text-[10px] text-gray-400">DEMO ONLY</span>
-                    </div>
-                    <p className="mt-3 min-h-10 text-xs leading-5 text-gray-600">{sample.description}</p>
-                    <code className="mt-2 block break-all rounded bg-gray-50 p-2 text-[10px] text-gray-700">{sample.url}</code>
-                    <div className="mt-3 flex gap-2">
-                      <button onClick={() => { setInputMode("url"); setInputValue(sample.url); }} className="flex-1 rounded-md bg-slate-900 px-2 py-2 text-xs font-semibold text-white hover:bg-slate-700">Load URL</button>
-                      <button onClick={() => { setInputMode("message"); setInputValue(sample.message); }} className="flex-1 rounded-md border border-gray-300 px-2 py-2 text-xs font-semibold text-gray-700 hover:bg-gray-50">Load message</button>
-                    </div>
-                    <div className="mt-3 flex items-center gap-3 rounded-lg border border-dashed border-gray-200 p-2">
-                      <img src={sample.qr} alt={`${sample.category} demo QR code`} className="h-20 w-20 bg-white object-contain" />
-                      <div className="min-w-0">
-                        <p className="text-xs font-semibold text-gray-800">QR sample</p>
-                        <p className="mt-1 text-[10px] leading-4 text-gray-500">Upload this image in QR & Image Intake to decode and scan its destination.</p>
+              {demoMode && (
+                <div className="mb-5 rounded-lg border border-indigo-200 bg-indigo-50 p-3 text-xs leading-5 text-indigo-900">
+                  <strong>DEMO MODE ACTIVE.</strong> Use a fixture's Show URL result or Show message result button for a deterministic, predefined presentation result. Manually entered text continues through the live backend.
+                </div>
+              )}
+              <div className="space-y-6">
+                {(["SAFE", "SUSPICIOUS", "DANGEROUS"] as const).map((category) => {
+                  const categorySamples = demoSamples.filter((sample) => sample.category === category);
+                  const tone = category === "SAFE"
+                    ? "border-emerald-200 bg-emerald-50 text-emerald-800"
+                    : category === "SUSPICIOUS"
+                      ? "border-amber-200 bg-amber-50 text-amber-800"
+                      : "border-rose-200 bg-rose-50 text-rose-800";
+                  return (
+                    <section key={category} className="rounded-xl border border-gray-200 bg-white p-4">
+                      <div className="mb-3 flex items-center justify-between gap-2">
+                        <span className={`rounded-full border px-3 py-1 text-[10px] font-bold tracking-wider ${tone}`}>{category}</span>
+                        <span className="text-[10px] font-mono text-gray-500">10 URLS · 10 MESSAGES</span>
                       </div>
-                    </div>
-                  </article>
-                ))}
+                      <div className="space-y-3">
+                        {categorySamples.map((sample, index) => {
+                          const urlCopyKey = `${sample.id}-url`;
+                          const messageCopyKey = `${sample.id}-message`;
+                          return (
+                            <article key={sample.id} className="rounded-lg border border-gray-200 p-3">
+                              <div className="mb-2 flex items-center justify-between gap-2">
+                                <p className="text-xs font-semibold text-gray-900">{index + 1}. {sample.title}</p>
+                                <span className="text-[10px] text-gray-400">FIXTURE</span>
+                              </div>
+                              <div className="space-y-2">
+                                <div className="flex items-start gap-2">
+                                  <div className="min-w-0 flex-1">
+                                    <p className="mb-1 text-[10px] font-bold uppercase tracking-wider text-gray-500">URL</p>
+                                    <code className="block break-all rounded bg-gray-50 p-2 text-[11px] text-gray-700">{sample.url}</code>
+                                  </div>
+                                  <button type="button" onClick={() => void copyDemoText(sample.url, urlCopyKey)} aria-label="Copy URL" title="Copy URL" className="mt-5 rounded-md border border-gray-200 p-2 text-gray-600 hover:bg-gray-100">
+                                    {copiedId === urlCopyKey ? <Check className="h-4 w-4 text-emerald-600" /> : <Copy className="h-4 w-4" />}
+                                  </button>
+                                </div>
+                                <div className="flex items-start gap-2">
+                                  <div className="min-w-0 flex-1">
+                                    <p className="mb-1 text-[10px] font-bold uppercase tracking-wider text-gray-500">MESSAGE / SMS</p>
+                                    <p className="rounded bg-gray-50 p-2 text-[11px] leading-5 text-gray-700">{sample.message}</p>
+                                  </div>
+                                  <button type="button" onClick={() => void copyDemoText(sample.message, messageCopyKey)} aria-label="Copy message" title="Copy message" className="mt-5 rounded-md border border-gray-200 p-2 text-gray-600 hover:bg-gray-100">
+                                    {copiedId === messageCopyKey ? <Check className="h-4 w-4 text-emerald-600" /> : <Copy className="h-4 w-4" />}
+                                  </button>
+                                </div>
+                              </div>
+                              <div className="mt-3 flex flex-wrap gap-2">
+                                <button type="button" onClick={() => { setInputMode("url"); setInputValue(sample.url); setSelectedDemo({ id: sample.id, mode: "url" }); }} className="rounded-md border border-gray-300 px-3 py-2 text-[11px] font-semibold text-gray-700 hover:bg-gray-50">Load URL</button>
+                                <button type="button" onClick={() => { setInputMode("message"); setInputValue(sample.message); setSelectedDemo({ id: sample.id, mode: "message" }); }} className="rounded-md border border-gray-300 px-3 py-2 text-[11px] font-semibold text-gray-700 hover:bg-gray-50">Load message</button>
+                                {demoMode && (
+                                  <>
+                                    <button type="button" onClick={() => { setInputMode("url"); setInputValue(sample.url); setSelectedDemo({ id: sample.id, mode: "url" }); handleDemoScan(sample.id, "url"); }} className="rounded-md bg-slate-900 px-3 py-2 text-[11px] font-semibold text-white hover:bg-slate-700">Show URL result</button>
+                                    <button type="button" onClick={() => { setInputMode("message"); setInputValue(sample.message); setSelectedDemo({ id: sample.id, mode: "message" }); handleDemoScan(sample.id, "message"); }} className="rounded-md bg-indigo-700 px-3 py-2 text-[11px] font-semibold text-white hover:bg-indigo-600">Show message result</button>
+                                  </>
+                                )}
+                              </div>
+                            </article>
+                          );
+                        })}
+                      </div>
+                    </section>
+                  );
+                })}
               </div>
-              <p className="mt-3 text-[10px] leading-4 text-gray-500">
-                Demo labels are reference examples, not guaranteed model predictions. Suspicious and dangerous destinations use reserved non-routable domains. Generate all 12 QR assets with <code>python backend/scripts/generate_demo_qr.py</code> from the repository root before running the frontend.
+              <p className="mt-4 text-[10px] leading-4 text-gray-500">
+                Demo verdicts and scores are predefined presentation fixtures, not predictions from the live detection engine. Suspicious and dangerous examples use reserved .example and .invalid domains and are not real malicious destinations. QR image upload remains available separately.
               </p>
             </div>
           </div>
