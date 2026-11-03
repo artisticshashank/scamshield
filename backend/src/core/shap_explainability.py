@@ -1,13 +1,17 @@
-"""SHAP explanations for the fitted URL TF-IDF/logistic-regression model."""
+"""Exact SHAP explanations for the fitted linear URL classifier.
+
+For a binary logistic-regression model and an all-zero feature baseline,
+the exact interventional SHAP value for feature i is coefficient_i * x_i.
+The baseline is the model intercept. This preserves SHAP's additive
+explanation without importing the heavyweight optional SHAP package.
+"""
 
 from __future__ import annotations
 
 from dataclasses import asdict, dataclass
-from functools import lru_cache
 from typing import Any
 
 import numpy as np
-from scipy import sparse
 
 from .ml_classifier import MODEL_NAME, URLClassifier
 from .normalization import NormalizedURL, normalize_url
@@ -15,7 +19,7 @@ from .normalization import NormalizedURL, normalize_url
 
 @dataclass(frozen=True)
 class SHAPFeature:
-    """One character n-gram attribution from the actual SHAP explanation."""
+    """One character n-gram attribution from the exact linear SHAP calculation."""
 
     feature: str
     feature_value: float
@@ -31,7 +35,7 @@ class SHAPFeature:
 
 @dataclass(frozen=True)
 class SHAPResult:
-    """Stable application contract over SHAP's version-dependent shapes."""
+    """Stable application contract for exact linear SHAP explanations."""
 
     explainer_type: str
     model_name: str
@@ -58,11 +62,11 @@ def explain_url(
     top_positive: int | None = None,
     top_negative: int | None = None,
 ) -> SHAPResult:
-    """Explain one prediction using the exact fitted model and vectorizer.
+    """Explain a URL using exact linear SHAP values in raw log-odds space.
 
-    SHAP values are in the classifier's raw decision-function (log-odds)
-    space. The additive identity is therefore:
-    ``base_value + sum(shap_values) == prediction_value``.
+    With the zero-vector background used by the previous LinearExplainer
+    integration, each attribution is x_i * coefficient_i and the baseline
+    is the intercept. Their sum exactly reconstructs decision_function.
     """
 
     if max_features < 1:
@@ -70,23 +74,23 @@ def explain_url(
     normalized = _normalize_input(value)
     matrix = model.vectorizer.transform([normalized.normalized_url])
     _validate_binary_classifier(model)
-    shap = _load_shap()
-    explainer = _cached_explainer(model, shap)
-    explanation = explainer(matrix)
-    shap_values = _normalize_shap_values(explanation.values, matrix.shape[1])
-    base_value = _normalize_scalar(explanation.base_values)
+
+    coefficients = np.asarray(model.classifier.coef_[0], dtype=float)
+    base_value = float(np.asarray(model.classifier.intercept_).reshape(-1)[0])
+    feature_values = matrix.toarray()[0]
+    shap_values = feature_values * coefficients
     prediction_value = float(model.classifier.decision_function(matrix)[0])
+
     if not np.isclose(base_value + float(shap_values.sum()), prediction_value, atol=1e-6):
-        raise RuntimeError("SHAP values do not reconcile with the classifier prediction")
+        raise RuntimeError("Linear SHAP values do not reconcile with the classifier prediction")
 
     names = model.vectorizer.get_feature_names_out()
-    feature_values = matrix.toarray()[0]
     positive_limit = top_positive if top_positive is not None else max_features
     negative_limit = top_negative if top_negative is not None else max_features
     ranked = _build_features(names, feature_values, shap_values)
     selected = _select_features(ranked, positive_limit, negative_limit, max_features)
     return SHAPResult(
-        explainer_type="shap.LinearExplainer",
+        explainer_type="exact_linear_shap_zero_baseline",
         model_name=MODEL_NAME,
         model_version=model.model_version,
         explained_class="phishing",
@@ -97,24 +101,16 @@ def explain_url(
         plain_language_summary=_plain_language_summary(selected),
         metadata={
             "output_space": "log_odds",
-            "shap_version": str(getattr(shap, "__version__", "unknown")),
+            "shap_method": "exact linear SHAP with zero-vector background",
             "input": normalized.normalized_url,
             "feature_count": int(matrix.shape[1]),
             "nonzero_features": int(matrix.nnz),
             "shap_value_sum": float(shap_values.sum()),
             "model_prediction": int(model.predict_one(normalized).predicted_class),
             "probability_is_calibrated": False,
-            "baseline_note": "The zero-vector baseline represents an input with no active URL text features; SHAP values explain movement from this baseline, not a calibrated risk percentage.",
+            "baseline_note": "The zero-vector baseline represents an input with no active URL text features; the intercept is the baseline log-odds. SHAP values explain movement from this baseline, not a calibrated risk percentage.",
         },
     )
-
-
-@lru_cache(maxsize=4)
-def _cached_explainer(model: URLClassifier, shap_module: Any) -> Any:
-    """Reuse the linear explainer across URLs for the same fitted model."""
-    feature_count = len(model.vectorizer.get_feature_names_out())
-    background = sparse.csr_matrix((1, feature_count), dtype=np.float64)
-    return shap_module.LinearExplainer(model.classifier, background)
 
 
 def _normalize_input(value: str | NormalizedURL) -> NormalizedURL:
@@ -131,37 +127,8 @@ def _validate_binary_classifier(model: URLClassifier) -> None:
     classes = {int(label) for label in model.classifier.classes_}
     if classes != {0, 1}:
         raise ValueError("SHAP explanations require a binary benign/phishing classifier")
-
-
-def _load_shap() -> Any:
-    try:
-        import shap
-    except (ImportError, OSError) as exc:
-        raise RuntimeError(
-            "SHAP is installed but unavailable in this environment; "
-            "its compiled dependency could not be loaded"
-        ) from exc
-    return shap
-
-
-def _normalize_shap_values(values: Any, feature_count: int) -> np.ndarray:
-    array = np.asarray(values, dtype=float)
-    if array.ndim == 3:
-        array = array[0, :, 1]
-    elif array.ndim == 2:
-        array = array[0]
-    elif array.ndim != 1:
-        raise RuntimeError(f"Unsupported SHAP value shape: {array.shape}")
-    if array.shape[0] != feature_count:
-        raise RuntimeError("SHAP feature count does not match the fitted vectorizer")
-    return array
-
-
-def _normalize_scalar(value: Any) -> float:
-    array = np.asarray(value, dtype=float).reshape(-1)
-    if array.size == 0:
-        raise RuntimeError("SHAP returned no expected value")
-    return float(array[0])
+    if np.asarray(model.classifier.coef_).shape[0] != 1:
+        raise ValueError("SHAP explanations require a binary logistic-regression model")
 
 
 def _build_features(
