@@ -24,11 +24,7 @@ def main() -> None:
     generated = []
     for output_dir in OUTPUTS:
         output_dir.mkdir(parents=True, exist_ok=True)
-    for category in ("genuine", "suspicious", "dangerous"):
-        sample = next(
-            item for item in corpus["samples"]
-            if item["reference_category"] == category
-        )
+    for sample in corpus["samples"]:
         qr = qrcode.QRCode(
             version=None,
             error_correction=qrcode.constants.ERROR_CORRECT_M,
@@ -38,8 +34,9 @@ def main() -> None:
         qr.add_data(sample["qr_payload"])
         qr.make(fit=True)
         image = qr.make_image(image_factory=SvgPathImage)
+        filename = f'{sample["id"]}.svg'
         for output_dir in OUTPUTS:
-            destination = output_dir / f"{category}.svg"
+            destination = output_dir / filename
             image.save(destination)
             generated.append(destination)
     for path in generated:
