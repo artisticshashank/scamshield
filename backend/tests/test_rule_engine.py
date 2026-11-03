@@ -28,6 +28,17 @@ def test_benign_https_url_has_no_rules() -> None:
     assert _scan("https://www.example.com/about") == []
 
 
+def test_reserved_invalid_tld_is_explicit_critical_evidence() -> None:
+    evidence = next(
+        item for item in _scan("http://parcel-customs-release.invalid/pay/urgent-fee")
+        if item.rule_id == "URL_RESERVED_INVALID_TLD"
+    )
+
+    assert evidence.severity == "critical"
+    assert evidence.score == 100
+    assert "reserved .invalid" in evidence.explanation
+
+
 def test_ip_url_triggers_structured_high_severity_evidence() -> None:
     evidence = next(item for item in _scan("https://192.0.2.10/login") if item.rule_id == "URL_IP_HOST")
 
