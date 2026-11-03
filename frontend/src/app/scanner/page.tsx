@@ -259,7 +259,7 @@ export default function ScannerPage() {
                     category: "GENUINE",
                     url: "https://www.python.org/",
                     message: "You can read the official Python documentation here: https://www.python.org/",
-                    qr: "/demo-qr/genuine.svg",
+                    qr: "/demo-qr/G-URL-01.svg",
                     tone: "border-emerald-200 bg-emerald-50 text-emerald-800",
                     description: "Known public site · neutral context",
                   },
@@ -267,7 +267,7 @@ export default function ScannerPage() {
                     category: "SUSPICIOUS",
                     url: "https://account-verify.example/login?continue=profile",
                     message: "A message says my profile needs checking: https://account-verify.example/login?continue=profile",
-                    qr: "/demo-qr/suspicious.svg",
+                    qr: "/demo-qr/S-URL-01.svg",
                     tone: "border-amber-200 bg-amber-50 text-amber-800",
                     description: "Unverified host · account verification wording",
                   },
@@ -275,7 +275,7 @@ export default function ScannerPage() {
                     category: "DANGEROUS",
                     url: "http://secure-bank-login-verify.invalid/urgent/account/confirm",
                     message: "URGENT: Your bank access will be suspended. Verify your password now: http://secure-bank-login-verify.invalid/urgent/account/confirm",
-                    qr: "/demo-qr/dangerous.svg",
+                    qr: "/demo-qr/D-URL-01.svg",
                     tone: "border-rose-200 bg-rose-50 text-rose-800",
                     description: "Urgency · credential request · synthetic host",
                   },
@@ -302,7 +302,7 @@ export default function ScannerPage() {
                 ))}
               </div>
               <p className="mt-3 text-[10px] leading-4 text-gray-500">
-                Demo labels are reference examples, not guaranteed model predictions. Suspicious and dangerous destinations use reserved non-routable domains. Generate QR assets with <code>python backend/scripts/generate_demo_qr.py</code> before running the frontend.
+                Demo labels are reference examples, not guaranteed model predictions. Suspicious and dangerous destinations use reserved non-routable domains. Generate all 12 QR assets with <code>python backend/scripts/generate_demo_qr.py</code> from the repository root before running the frontend.
               </p>
             </div>
           </div>
