@@ -420,7 +420,7 @@ export default function ScannerPage() {
               </div>
             </div>
             <p className="mt-4 text-xs leading-5 text-gray-500">External reputation, domain and redirect signals are shown as unavailable when providers are not configured or a lookup fails.</p>
-          </div>v>
+          </div>
         </div>
 
       </div>
