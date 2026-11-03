@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 from dataclasses import asdict, dataclass
+from functools import lru_cache
 from typing import Any
 
 import numpy as np
@@ -70,8 +71,7 @@ def explain_url(
     matrix = model.vectorizer.transform([normalized.normalized_url])
     _validate_binary_classifier(model)
     shap = _load_shap()
-    background = sparse.csr_matrix((1, matrix.shape[1]), dtype=np.float64)
-    explainer = shap.LinearExplainer(model.classifier, background)
+    explainer = _cached_explainer(model, shap)
     explanation = explainer(matrix)
     shap_values = _normalize_shap_values(explanation.values, matrix.shape[1])
     base_value = _normalize_scalar(explanation.base_values)
@@ -107,6 +107,14 @@ def explain_url(
             "baseline_note": "The zero-vector baseline represents an input with no active URL text features; SHAP values explain movement from this baseline, not a calibrated risk percentage.",
         },
     )
+
+
+@lru_cache(maxsize=4)
+def _cached_explainer(model: URLClassifier, shap_module: Any) -> Any:
+    """Reuse the linear explainer across URLs for the same fitted model."""
+    feature_count = len(model.vectorizer.get_feature_names_out())
+    background = sparse.csr_matrix((1, feature_count), dtype=np.float64)
+    return shap_module.LinearExplainer(model.classifier, background)
 
 
 def _normalize_input(value: str | NormalizedURL) -> NormalizedURL:
