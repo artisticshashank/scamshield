@@ -241,7 +241,7 @@ def build_scan_result(
     original_input: str,
     *,
     classifier: URLClassifier | None = None,
-    shap_result: object | None = None,
+    shap_result: object | SignalResult | None = None,
     reputation: SignalResult | None = None,
     domain_intelligence: SignalResult | None = None,
     redirect: SignalResult | None = None,
@@ -281,9 +281,11 @@ def build_scan_result(
             else SignalResult(SignalStatus.UNAVAILABLE)
         ),
         shap_result=(
-            SignalResult(SignalStatus.AVAILABLE, _serialize(shap_result))
+            shap_result
+            if isinstance(shap_result, SignalResult)
+            else SignalResult(SignalStatus.AVAILABLE, _serialize(shap_result))
             if shap_result is not None
-            else SignalResult(SignalStatus.UNAVAILABLE)
+            else SignalResult(SignalStatus.UNAVAILABLE, error="SHAP explanation was not run")
         ),
         reputation_result=reputation or not_implemented_signal(),
         domain_intelligence_result=domain_intelligence or not_implemented_signal(),
