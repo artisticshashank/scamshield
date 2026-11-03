@@ -105,7 +105,7 @@ class ScanService:
                 "normalization": "available",
                 "rules": "available",
                 "ml": self.classifier_service.status.value,
-                "shap": "ready" if self.classifier_service.classifier is not None else "not_configured",
+                "shap": "configured" if self.classifier_service.classifier is not None else "not_configured",
                 "reputation": "available" if self.reputation_providers else "not_configured",
                 "domain_intelligence": "available",
                 "redirect_analysis": "available",
