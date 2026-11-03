@@ -87,6 +87,15 @@ def _evidence(
     )
 
 
+def rule_reserved_invalid_tld(url: NormalizedURL, _: URLFeatures, __: RuleThresholds) -> RuleEvidence:
+    triggered = url.hostname == "invalid" or url.hostname.endswith(".invalid")
+    return _evidence(
+        "URL_RESERVED_INVALID_TLD", "domain", "critical", triggered, 100,
+        "The hostname uses the reserved .invalid top-level domain and cannot be a public destination.",
+        "hostname_tld", "invalid" if triggered else "",
+    )
+
+
 def rule_ip_host(_: NormalizedURL, features: URLFeatures, t: RuleThresholds) -> RuleEvidence:
     return _evidence(
         "URL_IP_HOST", "host", "high", features.is_ip_host, t.ip_host_score,
@@ -251,6 +260,7 @@ def rule_brand_impersonation(_: NormalizedURL, features: URLFeatures, t: RuleThr
 
 
 RULES: Final[tuple[Rule, ...]] = (
+    rule_reserved_invalid_tld,
     rule_ip_host,
     rule_userinfo,
     rule_punycode,
