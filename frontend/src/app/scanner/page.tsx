@@ -232,7 +232,7 @@ export default function ScannerPage() {
                       />
                     </div>
                     <button 
-                      onClick={() => void handleScan()}
+                      onClick={() => demoMode && selectedDemo ? handleDemoScan(selectedDemo.id, selectedDemo.mode) : void handleScan()}
                       disabled={!inputValue.trim()}
                       className="bg-[#0F172A] text-white px-8 h-full rounded-lg font-bold flex items-center gap-2 hover:bg-gray-800 transition-colors disabled:opacity-50 disabled:cursor-not-allowed shadow-sm"
                     >
