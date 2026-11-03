@@ -73,6 +73,60 @@ export default function ForensicsPage() {
     queueMicrotask(() => setResponse(readSelectedScan()));
   }, []);
 
+  const demoMetadata = response?.metadata;
+  if (response && demoMetadata?.demo_mode === true) {
+    const messageResult = isMessageScan(response);
+    const demoInput = messageResult ? response.original_message : response.original_input;
+    const demoVerdict = messageResult ? response.overall_verdict : response.verdict;
+    const demoScore = messageResult ? response.overall_risk_score : response.risk_score;
+    const demoCategory = String(demoMetadata.demo_category ?? demoVerdict).toUpperCase();
+    return (
+      <div className="max-w-5xl mx-auto space-y-6 pb-20">
+        <header className="flex items-center justify-between border-b border-gray-200 pb-4">
+          <div className="text-sm font-semibold uppercase tracking-widest text-gray-500">SEC OPS / <span className="text-gray-900">Demo Forensics</span></div>
+          <Link href="/" className="text-sm font-bold text-gray-900 hover:text-blue-600">Back to scanner</Link>
+        </header>
+        <section className="rounded-2xl border border-indigo-200 bg-indigo-50 p-4">
+          <p className="text-xs font-black uppercase tracking-widest text-indigo-900">Demo result — not a live model prediction</p>
+          <p className="mt-1 text-sm leading-6 text-indigo-900">This result is a predefined presentation fixture. The live backend, ML classifier, risk fusion and SHAP were not run for this result.</p>
+        </section>
+        <section className="space-y-6 rounded-2xl border border-gray-200 bg-white p-8 shadow-sm">
+          <div className="flex flex-wrap items-start justify-between gap-4">
+            <div>
+              <h1 className="text-3xl font-bold text-gray-900">Threat Forensics Report</h1>
+              <p className="mt-2 text-sm text-gray-500">{messageResult ? "Demonstration message scan" : "Demonstration URL scan"} · Fixture {String(demoMetadata.demo_fixture_id ?? "")}</p>
+            </div>
+            <span className={`rounded px-3 py-2 text-sm font-bold ${statusClass(formatVerdict(demoVerdict))}`}>{demoCategory}</span>
+          </div>
+          <div className="rounded-xl border border-gray-200 bg-gray-50 p-5">
+            <p className="mb-2 text-xs font-bold uppercase tracking-wider text-gray-500">{messageResult ? "Demonstration message" : "Demonstration URL"}</p>
+            <code className="break-all text-sm text-gray-900">{demoInput}</code>
+          </div>
+          <div className="flex flex-wrap items-center justify-between gap-4 rounded-xl border border-gray-200 bg-gray-50 p-6">
+            <div>
+              <p className="text-xs font-bold uppercase tracking-wider text-gray-500">Predefined demo risk score</p>
+              <p className="mt-1 text-5xl font-black text-gray-900">{typeof demoScore === "number" ? demoScore.toFixed(1) : "—"}<span className="text-xl text-gray-400">/100</span></p>
+            </div>
+            <p className="max-w-md text-sm leading-6 text-gray-700">{response.recommendation}</p>
+          </div>
+          <div className="rounded-xl border border-gray-200 p-5">
+            <h2 className="font-bold text-gray-900">What this demonstrates</h2>
+            <ul className="mt-3 list-disc space-y-2 pl-5 text-sm leading-6 text-gray-700">
+              <li>How ScamShield presents a category verdict and risk score.</li>
+              <li>How URL and message scanning results can be displayed.</li>
+              <li>How a user-facing recommendation is communicated.</li>
+            </ul>
+            <p className="mt-4 text-xs leading-5 text-gray-500">This fixture does not represent measured backend evidence, reputation checks, domain intelligence, redirect analysis or SHAP attribution. Switch Demo Mode off and run a live scan to see actual engine output.</p>
+          </div>
+          <div className="flex flex-wrap gap-3">
+            <Link href="/" className="rounded-lg bg-slate-900 px-4 py-2 text-sm font-semibold text-white hover:bg-slate-700">Return to scanner</Link>
+            <Link href="/history" className="rounded-lg border border-gray-300 px-4 py-2 text-sm font-semibold text-gray-700 hover:bg-gray-50">View scan history</Link>
+          </div>
+        </section>
+      </div>
+    );
+  }
+
   const scan = response ? primaryScan(response) : null;
   const message = response && isMessageScan(response) ? response : null;
 
