@@ -22,6 +22,24 @@ function statusClass(verdict: string): string {
   return "bg-green-600 text-white";
 }
 
+const friendlyRuleReasons: Record<string, string> = {
+  URL_IP_HOST: "This address uses a number-based internet address instead of a recognizable website name. That can make the site owner harder to identify.",
+  URL_USERINFO_TRICK: "The address contains a construction that can make text before the @ symbol look like the website name, while the real destination is after it.",
+  URL_PUNYCODE: "The website name uses encoded characters. Scammers sometimes use look-alike letters to make a fake domain resemble a real one.",
+  URL_EXCESSIVE_SUBDOMAINS: "There are many name segments before the main domain. This can make the real website owner harder to spot.",
+  URL_SUSPICIOUS_TLD: "The domain ending is seen more often in suspicious links. This is only a warning sign, not proof by itself.",
+  URL_SUSPICIOUS_PORT: "The link uses an unusual connection port rather than the standard web ports.",
+  URL_NO_HTTPS: "The link does not use an encrypted HTTPS connection. This can expose information in transit, but does not by itself mean the site is a scam.",
+  URL_OBFUSCATION: "Some characters in the address are encoded or disguised, making the destination harder to read.",
+  URL_EXCESSIVE_LENGTH: "The address is unusually long. Long links can hide extra tracking or confusing destination details.",
+  URL_CREDENTIAL_KEYWORDS: "The address contains words associated with signing in or entering account details. Be careful if it asks for a password or one-time code.",
+  URL_PAYMENT_KEYWORDS: "The address contains payment-related wording. Verify payment requests through the official app or website.",
+  URL_URGENCY_KEYWORDS: "The address contains urgent-warning wording. Scammers often pressure people to act before checking.",
+  URL_SHORTENER: "This is a shortened link, so the final destination is hidden until it is safely expanded.",
+  URL_DOUBLE_SLASH_PATH: "The path contains an unusual double slash, which can sometimes be used to disguise where a link leads.",
+  URL_BRAND_IMPERSONATION: "A recognizable brand name appears in a web address that is not its official domain. Check the actual domain carefully.",
+};
+
 function SignalCard({
   name,
   signal,
@@ -248,7 +266,12 @@ export default function ForensicsPage() {
                     <strong className="text-sm text-gray-900">{String(item.rule_id ?? item.category ?? "Evidence")}</strong>
                     <span className="text-xs font-mono text-gray-500">score {String(item.score ?? item.contribution ?? 0)}</span>
                   </div>
-                  <p className="text-sm text-gray-600 mt-1">{String(item.explanation ?? "Triggered rule evidence")}</p>
+                  <p className="text-sm leading-6 text-gray-700 mt-2">{friendlyRuleReasons[String(item.rule_id ?? "")] ?? String(item.explanation ?? "A URL pattern matched a security rule.")}</p>
+                  <details className="mt-2">
+                    <summary className="cursor-pointer text-xs font-semibold text-gray-500">Technical reason</summary>
+                    <p className="mt-2 text-xs leading-5 text-gray-500">{String(item.explanation ?? "No additional technical detail was returned.")}</p>
+                    <p className="mt-1 font-mono text-[10px] text-gray-400">Feature: {String(item.feature ?? "—")} · Value: {String(item.value ?? "—")}</p>
+                  </details>
                 </div>
               ))}
             </div>
