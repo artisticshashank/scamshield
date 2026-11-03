@@ -179,7 +179,7 @@ export default function ForensicsPage() {
               </p>
             </div>
             <span className={`rounded-full px-3 py-1 text-xs font-semibold ${shapSignal?.status === "available" ? "bg-emerald-50 text-emerald-700" : "bg-amber-50 text-amber-800"}`}>
-              SHAP: {shapSignal?.status ?? "not available"}
+              SHAP: {String(shapSignal?.status ?? "not available")}
             </span>
           </div>
           {shapPayload ? (
