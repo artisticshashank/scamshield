@@ -246,30 +246,64 @@ export default function ScannerPage() {
             </div>
 
             <div className="bg-gray-50/80 border-t border-gray-200 p-6 pb-8">
-              <p className="text-[10px] font-bold text-gray-500 uppercase tracking-widest mb-3">BENCHMARK SAMPLES:</p>
-              <div className="flex flex-wrap gap-3">
-                <button 
-                  onClick={() => setInputValue("https://google.com")}
-                  className="text-xs font-bold text-gray-700 bg-white border border-gray-200 px-3 py-2 rounded-md hover:border-gray-300 hover:bg-gray-50 flex items-center gap-2 shadow-sm transition-colors"
-                >
-                  <span className="w-2 h-2 rounded-full bg-gray-400"></span>
-                  Safe Domain (google.com)
-                </button>
-                <button 
-                   onClick={() => setInputValue("https://shorturl-gateway.io/x8f2a")}
-                   className="text-xs font-bold text-gray-700 bg-white border border-gray-200 px-3 py-2 rounded-md hover:border-gray-300 hover:bg-gray-50 flex items-center gap-2 shadow-sm transition-colors"
-                >
-                  <span className="w-2 h-2 rounded-full bg-gray-400"></span>
-                  Suspicious Link (shorturl-gateway.io)
-                </button>
-                <button 
-                   onClick={() => setInputValue("https://secure-login-chase-update.com/account/verify")}
-                   className="text-xs font-bold text-gray-700 bg-white border border-gray-200 px-3 py-2 rounded-md hover:border-gray-300 hover:bg-gray-50 flex items-center gap-2 shadow-sm transition-colors"
-                >
-                  <span className="w-2 h-2 rounded-full bg-red-500 shadow-[0_0_4px_rgba(239,68,68,0.5)]"></span>
-                  Active Phish (secure-login-chase-update.com)
-                </button>
+              <div className="flex flex-wrap items-center justify-between gap-2 mb-4">
+                <div>
+                  <p className="text-[10px] font-bold text-gray-500 uppercase tracking-widest">DEMO TEST LIBRARY</p>
+                  <p className="mt-1 text-xs text-gray-500">Load a URL or message, or scan the matching QR image.</p>
+                </div>
+                <span className="rounded-full bg-white border border-gray-200 px-2 py-1 text-[10px] font-mono text-gray-500">3 REFERENCE CATEGORIES</span>
               </div>
+              <div className="grid gap-3 md:grid-cols-3">
+                {[
+                  {
+                    category: "GENUINE",
+                    url: "https://www.python.org/",
+                    message: "You can read the official Python documentation here: https://www.python.org/",
+                    qr: "/demo-qr/genuine.svg",
+                    tone: "border-emerald-200 bg-emerald-50 text-emerald-800",
+                    description: "Known public site · neutral context",
+                  },
+                  {
+                    category: "SUSPICIOUS",
+                    url: "https://account-verify.example/login?continue=profile",
+                    message: "A message says my profile needs checking: https://account-verify.example/login?continue=profile",
+                    qr: "/demo-qr/suspicious.svg",
+                    tone: "border-amber-200 bg-amber-50 text-amber-800",
+                    description: "Unverified host · account verification wording",
+                  },
+                  {
+                    category: "DANGEROUS",
+                    url: "http://secure-bank-login-verify.invalid/urgent/account/confirm",
+                    message: "URGENT: Your bank access will be suspended. Verify your password now: http://secure-bank-login-verify.invalid/urgent/account/confirm",
+                    qr: "/demo-qr/dangerous.svg",
+                    tone: "border-rose-200 bg-rose-50 text-rose-800",
+                    description: "Urgency · credential request · synthetic host",
+                  },
+                ].map((sample) => (
+                  <article key={sample.category} className="rounded-xl border border-gray-200 bg-white p-4">
+                    <div className="flex items-center justify-between gap-2">
+                      <span className={`rounded-full border px-2 py-1 text-[10px] font-bold tracking-wider ${sample.tone}`}>{sample.category}</span>
+                      <span className="text-[10px] text-gray-400">DEMO ONLY</span>
+                    </div>
+                    <p className="mt-3 min-h-10 text-xs leading-5 text-gray-600">{sample.description}</p>
+                    <code className="mt-2 block break-all rounded bg-gray-50 p-2 text-[10px] text-gray-700">{sample.url}</code>
+                    <div className="mt-3 flex gap-2">
+                      <button onClick={() => { setInputMode("url"); setInputValue(sample.url); }} className="flex-1 rounded-md bg-slate-900 px-2 py-2 text-xs font-semibold text-white hover:bg-slate-700">Load URL</button>
+                      <button onClick={() => { setInputMode("message"); setInputValue(sample.message); }} className="flex-1 rounded-md border border-gray-300 px-2 py-2 text-xs font-semibold text-gray-700 hover:bg-gray-50">Load message</button>
+                    </div>
+                    <div className="mt-3 flex items-center gap-3 rounded-lg border border-dashed border-gray-200 p-2">
+                      <img src={sample.qr} alt={`${sample.category} demo QR code`} className="h-20 w-20 bg-white object-contain" />
+                      <div className="min-w-0">
+                        <p className="text-xs font-semibold text-gray-800">QR sample</p>
+                        <p className="mt-1 text-[10px] leading-4 text-gray-500">Upload this image in QR & Image Intake to decode and scan its destination.</p>
+                      </div>
+                    </div>
+                  </article>
+                ))}
+              </div>
+              <p className="mt-3 text-[10px] leading-4 text-gray-500">
+                Demo labels are reference examples, not guaranteed model predictions. Suspicious and dangerous destinations use reserved non-routable domains. Generate QR assets with <code>python backend/scripts/generate_demo_qr.py</code> before running the frontend.
+              </p>
             </div>
           </div>
         </div>
