@@ -17,6 +17,8 @@ def test_demo_corpus_has_all_three_categories_and_input_modalities() -> None:
     assert len({item["id"] for item in samples}) == len(samples)
     assert all(item["url"].startswith(("http://", "https://")) for item in samples)
     assert all(item["qr_payload"] == item["url"] for item in samples)
+    assert all(item["qr_asset"].endswith(f'{item["id"]}.svg') for item in samples)
+    assert len({item["qr_asset"] for item in samples}) == len(samples)
     assert all(item["message"].strip() for item in samples)
     assert all(item["rationale"].strip() for item in samples)
 
